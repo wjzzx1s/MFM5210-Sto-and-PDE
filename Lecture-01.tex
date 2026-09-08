@@ -1,0 +1,386 @@
+% ----------------------------------------------------------------------
+% Lecture 01 — Preliminaries
+% MFM5210 Stochastics and Partial Differential Equations
+% Transcribed from Lecture-01.pdf (handwritten lecture notes)
+% ----------------------------------------------------------------------
+\documentclass[11pt]{article}
+
+\usepackage[a4paper, margin=1in]{geometry}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{mathtools}
+\usepackage[colorlinks=true, urlcolor=blue]{hyperref}
+
+\let\emptyset\varnothing
+
+% Probability measure as P / IP
+\newcommand{\Prob}{\mathbb{P}}
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{example}{Example}[section]
+\newtheorem{remark}{Remark}[section]
+\newtheorem{fact}{Fact}[section]
+\newtheorem{lemma}[fact]{Lemma}
+
+\newtheorem{theorem}{Theorem}[section]
+
+\title{\textbf{MFM5210 Stochastics and Partial Differential Equations}\\[4pt]
+\large Lecture 1 --- Preliminaries}
+\author{Wei Qi}
+\date{Sept 7, 2026}
+
+\begin{document}
+
+\maketitle
+
+\setcounter{section}{0}
+
+% ======================================================================
+\section{Preliminaries --- Basic Notations}
+% ======================================================================
+
+\subsection*{The probability space}
+
+\begin{definition}
+A probability space is a triple $(\Omega,\mathcal{F},\Prob)$ where
+\begin{itemize}
+  \item $\Omega$ is called the \emph{sample space},
+  \item $\mathcal{F}$ is a $\sigma$-algebra of subsets of $\Omega$ --- each
+        $A \in \mathcal{F}$ is called an \emph{event} (a subset of $\Omega$),
+  \item $\Prob$ is a \emph{probability measure}: for $A \in \mathcal{F}$,
+        $\Prob(A)$ is the probability that $A$ occurs.
+\end{itemize}
+\end{definition}
+
+\begin{definition}[$\sigma$-algebra]
+A $\sigma$-algebra on $\Omega$ is a collection $\mathcal{F}$ of subsets of
+$\Omega$ such that
+\begin{enumerate}
+  \item[(i)] $\Omega \in \mathcal{F}$;\qquad ($\emptyset \in \mathcal{F}$ as well)
+  \item[(ii)] If $A \in \mathcal{F}$, then $A^c \in \mathcal{F}$
+        (the complement of $A$ in $\Omega$);
+  \item[(iii)] If $A_1, A_2, \dots \in \mathcal{F}$, then
+        $\displaystyle \bigcup_{n=1}^{\infty} A_n \in \mathcal{F}$.
+\end{enumerate}
+\end{definition}
+
+\begin{remark}
+This implies that if $A,B \in \mathcal{F}$, then both $A \cup B$ and $A \cap B$
+belong to $\mathcal{F}$.\;\;
+($A \cup B$: $A$ or $B$ occurs; \; $A \cap B$: $A$ and $B$ occur.)
+\end{remark}
+
+\begin{definition}[Probability measure]
+$\Prob : \mathcal{F} \to [0,1]$ is a probability measure if
+\begin{enumerate}
+  \item[(i)] $\Prob(\Omega) = 1$, $\;\Prob(\emptyset) = 0$;
+  \item[(ii)] If $A_1, A_2, \dots \in \mathcal{F}$ are events that are
+        \emph{disjoint} (i.e.\ $A_i \cap A_j = \emptyset$ for $i \neq j$),
+        then
+        \[
+          \Prob!\left(\bigcup_{n=1}^{\infty} A_n\right)
+          = \sum_{n=1}^{\infty} \Prob(A_n).
+        \]
+\end{enumerate}
+\end{definition}
+
+\begin{remark}
+This implies that if $A_1$ and $A_2$ are disjoint ($A_1 \cap A_2 = \emptyset$),
+then
+\[
+  \Prob(A_1 \cup A_2) = \Prob(A_1) + \Prob(A_2).
+\]
+\end{remark}
+
+\begin{example}[Roll a die]
+\[
+  \Omega = \{1,2,3,4,5,6\}, \qquad
+  \mathcal{F} = \text{the set of all subsets of } \Omega
+\]
+(Number of events in $\mathcal{F}$ is $2^{6}$.)
+\[
+  \Prob(\{5\}) = \tfrac{1}{6}, \qquad \Prob(\{1,2\}) = \tfrac{2}{6}, \quad \text{etc.}
+\]
+\end{example}
+
+% ======================================================================
+\section{Random Variables}
+% ======================================================================
+
+\begin{definition}
+$X : \Omega \to \mathbb{R}$ is called a \emph{random variable} (r.v.) if
+\[
+  \forall a \in \mathbb{R}, \quad
+  \{X \le a\} := \{\omega \in \Omega : X(\omega) \le a\} \in \mathcal{F}.
+\]
+We also say that $X$ is \emph{$\mathcal{F}$-measurable} (sometimes write
+$X \in \mathcal{F}$).
+\end{definition}
+
+\begin{example}[Roll a die]
+The following are examples of r.v.s:
+\begin{enumerate}
+  \item $X(1) = 1$, $X(2) = 2$, \dots, $X(6) = 6$;
+  \item $Y(6) = 1$, $Y(1) = Y(2) = \dots = Y(5) = 0$.\\
+        ($Y$ is called the \emph{indicator} of the event $A = \{6\}$.)
+\end{enumerate}
+Examples (1) and (2) above are ``discrete'' r.v.s. Another type of r.v.s
+are the ``continuous'' ones.
+\end{example}
+
+\begin{definition}[Continuous r.v.\ / density]
+$X$ is a \emph{continuous r.v.} if it has a (probability) density function
+$f(x)$ s.t.
+\[
+  \forall a \in \mathbb{R}, \quad
+  \Prob\{X \le a\} = \int_{-\infty}^{a} f(x)\,dx
+\]
+(each of these is the area under the curve $y = f(x)$ from $-\infty$ to $a$).
+\end{definition}
+
+\begin{example}[Normal r.v./distribution]
+$X$ is a normal r.v. / has normal distribution with mean $\mu \in \mathbb{R}$
+and variance $\sigma^2$ (where $\sigma > 0$) if $X$ has density
+\[
+  f(x) = \frac{1}{\sqrt{2\pi\sigma^2}}\, e^{-\frac{(x-\mu)^2}{2\sigma^2}}.
+\]
+In this case, we write $X \sim N(\mu, \sigma^2)$.
+\end{example}
+
+\begin{definition}[Expectation]
+The expectation (or expected value) of $X$ is defined as
+\[
+  \mathbb{E}[X] = \int_{\Omega} X\, d\Prob.
+\]
+If $X$ has density $f(x)$, expectation is computed as
+\[
+  \mathbb{E}[X] = \int_{-\infty}^{\infty} x\, f(x)\, dx.
+\]
+\end{definition}
+
+\begin{remark}
+Expectation may not always exist. It exists if $\mathbb{E}|X| < \infty$
+(as a finite number).
+\end{remark}
+
+% ======================================================================
+\section{Measurability and the Borel $\sigma$-algebra}
+% ======================================================================
+
+\begin{fact}[Recall]
+A r.v.\ $X$ is $\mathcal{F}$-measurable if
+$\forall a \in \mathbb{R}$, $\{X \le a\} \in \mathcal{F}$.
+\end{fact}
+
+\begin{fact}
+$X$ is $\mathcal{F}$-measurable
+$\;\Longrightarrow\;$ $\forall B \in \mathcal{B}(\mathbb{R})$,
+$\{X \in B\} \in \mathcal{F}$.
+\end{fact}
+
+\begin{definition}[Borel $\sigma$-algebra]
+$\mathcal{B}(\mathbb{R})$ is the smallest $\sigma$-algebra on $\mathbb{R}$
+containing all open sets (equivalently, all open intervals). It contains
+many subsets of $\mathbb{R}$, including all intervals of the form
+$(a,b)$, $[a,b]$, $(a,b]$, $[a,b)$, singletons $\{a\}$, all open sets,
+all closed sets, and (countable) unions and intersections of these sets.
+Each set $B \in \mathcal{B}(\mathbb{R})$ is called a \emph{Borel set}.
+(Almost all sets we encounter are Borel.)
+\end{definition}
+
+\begin{example}
+If $X$ is $\mathcal{F}$-measurable, then
+\[
+  \{X \le a\} = \{X \in (-\infty,a]\} \in \mathcal{F}, \qquad
+  \{a \le X < b\} = \{X \in [a,b)\} \in \mathcal{F},
+\]
+\[
+  \{X = a\} = \{X \in \{a\}\} \in \mathcal{F}.
+\]
+\end{example}
+
+\begin{definition}[$\sigma$-algebra generated by a r.v.]
+The $\sigma$-algebra generated by a r.v.\ $X$ is
+\[
+  \sigma(X) = \bigl\{ \{X \in B\} : B \in \mathcal{B}(\mathbb{R}) \bigr\},
+\]
+i.e.\ the $\sigma$-algebra $\sigma(X)$ that contains all events of the form
+$\{X \in B\}$ where $B$ is any Borel set.
+\end{definition}
+
+\begin{remark}[Interpretation]
+$\sigma(X)$ contains the information available by observing $X$.
+(If we know $X$, then for any Borel set $B$, we know whether the event
+$\{X \in B\}$ has occurred.)
+\end{remark}
+
+% ======================================================================
+\section{Stochastic Processes and Filtrations}
+% ======================================================================
+
+\begin{definition}[Stochastic process]
+A \emph{stochastic process} is a collection of r.v.s $\{X_t\}_{t \ge 0}$.
+\end{definition}
+
+\begin{definition}[Filtration]
+A \emph{filtration} is a collection of increasing $\sigma$-algebras
+$\{\mathcal{F}_t\}_{t \ge 0}$, i.e.
+\[
+  s < t \quad \Longrightarrow \quad \mathcal{F}_s \subseteq \mathcal{F}_t.
+\]
+\end{definition}
+
+\begin{remark}[Interpretation]
+$\mathcal{F}_t$ is the information available from the past up to time $t$.
+(At time $t$, for every $A \in \mathcal{F}_t$, we know whether this event
+has occurred.)
+\end{remark}
+
+\begin{definition}[Adapted]
+We say $\{X_t\}_{t \ge 0}$ is \emph{adapted} to filtration
+$\{\mathcal{F}_t\}_{t \ge 0}$ if
+\[
+  \forall t \ge 0, \quad X_t \text{ is } \mathcal{F}_t\text{-measurable}.
+\]
+\end{definition}
+
+\subsection*{Natural filtration}
+
+\begin{definition}[Natural filtration]
+The \emph{natural filtration} of $X = \{X_t\}_{t \ge 0}$ is the filtration
+$\{\mathcal{F}^X_t\}_{t \ge 0}$ defined as the smallest $\sigma$-algebra
+containing all events of the form $\{X_s \in B\}$ where $s \le t$,
+$B \in \mathcal{B}(\mathbb{R})$, namely
+\[
+  \mathcal{F}^X_t = \sigma\{X_s : s \le t\}
+  \quad \longleftrightarrow \quad
+  \begin{array}{l}
+    \text{contains all events } \{X_s \in B\},\; s \le t, B \in \mathcal{B}(\mathbb{R}),\\
+    \text{and unions/intersections of these events.}
+  \end{array}
+\]
+\end{definition}
+
+\begin{remark}[Interpretation]
+$\mathcal{F}^X_t$ is the information available by observing $X_s$ for all
+times $s \le t$.
+\end{remark}
+
+\begin{example}[Tossing a coin]
+Toss a coin over and over again. For $n = 1, 2, 3, \dots$, consider the
+random variable $X_n$ defined by
+\[
+  X_n = \begin{cases}
+    1 & \text{if the } n\text{th toss is heads},\\
+    0 & \text{if the } n\text{th toss is tails}.
+  \end{cases}
+\]
+Then $\{X_n\}_{n=1,2,\dots}$ is a (discrete-time) stochastic process.
+Its natural filtration is $\{\mathcal{F}^X_n\}_{n=1,2,\dots}$ where
+$\mathcal{F}^X_n$ is given by
+\[
+  \mathcal{F}^X_n = \sigma\{X_s : s \le n\} = \sigma(X_1, \dots, X_n).
+\]
+For example,
+\[
+  \{X_1 = 1\} \in \mathcal{F}^X_1, \qquad
+  \{X_1 = 1,\; X_2 = 0\} \in \mathcal{F}^X_2, \qquad
+  \{X_3 = 1\} \notin \mathcal{F}^X_2.
+\]
+\end{example}
+
+\begin{example}
+Every stochastic process $\{X_t\}_{t \ge 0}$ is adapted to its own natural
+filtration $\{\mathcal{F}^X_t\}_{t \ge 0}$.
+
+For example,
+\[
+  \{X_{10} \le 150\} \in \mathcal{F}^X_{10}, \qquad
+  \{X_3 - X_2 > 10\} \in \mathcal{F}^X_3, \text{ not in } \mathcal{F}^X_2
+  \text{ in general.}
+\]
+\end{example}
+
+\begin{example}[What r.v.s are $\sigma(X_1,\dots,X_n)$-measurable?]
+\textbf{Doob--Dynkin Lemma:} $Y$ is $\sigma(X_1,\dots,X_n)$-measurable
+iff there exists a (Borel) function $f : \mathbb{R}^n \to \mathbb{R}$ s.t.
+\[
+  Y = f(X_1, \dots, X_n).
+\]
+\end{example}
+
+\begin{example}
+Let $f : \mathbb{R} \to \mathbb{R}$ be a given (Borel) function, say
+continuous or piecewise continuous. Then $\{f(X_t)\}_{t \ge 0}$ defines
+another stochastic process. It is still adapted to
+$\{\mathcal{F}^X_t\}_{t \ge 0}$ (thanks to the Doob--Dynkin lemma).
+\end{example}
+
+% ======================================================================
+\section{Brownian Motion}
+% ======================================================================
+
+\begin{definition}[Brownian motion (BM)]
+Brownian motion $B = \{B_t\}_{t \ge 0}$ is a stochastic process with
+\begin{enumerate}
+  \item[(1)] $B_0 = 0$;
+  \item[(2)] \emph{Independent increments}:
+        for $0 \le t_0 < t_1 < \dots < t_n$,
+        \[
+          B_{t_1} - B_{t_0}, \quad B_{t_2} - B_{t_1}, \quad \dots, \quad
+          B_{t_n} - B_{t_{n-1}}
+        \]
+        are independent;
+  \item[(3)] \emph{Stationary and normal increments}:
+        for $0 \le s < t$, $B_t - B_s \sim N(0, t-s)$;
+  \item[(4)] $B$ is continuous as a function of $t$.
+\end{enumerate}
+\end{definition}
+
+\begin{remark}
+$B$ is called BM \emph{starting from $x$} if (1) is replaced by $B_0 = x$.
+\end{remark}
+
+\subsection*{Definition of independence}
+
+\begin{definition}[Independence]
+\begin{enumerate}
+  \item[(i)] $A, B \in \mathcal{F}$ are \emph{independent} if
+        $\Prob(A \cap B) = \Prob(A)\,\Prob(B)$.
+  \item[(ii)] r.v.s $X, Y$ are independent if
+        $\Prob(X \le a, Y \le b) = \Prob(X \le a)\,\Prob(Y \le b)$
+        for all $a, b \in \mathbb{R}$.
+  \item[(iii)] r.v.s $X_1, \dots, X_n$ are independent if for any $k$ of
+        them, $X_{i_1}, \dots, X_{i_k}$, and any $a_1, \dots, a_k \in \mathbb{R}$,
+        \[
+          \Prob(X_{i_1} \le a_1, \dots, X_{i_k} \le a_k)
+          = \Prob(X_{i_1} \le a_1) \cdots \Prob(X_{i_k} \le a_k).
+        \]
+  \item[(iv)] $X, Y$ independent $\Rightarrow$ $\mathbb{E}[XY] =
+        \mathbb{E}[X]\,\mathbb{E}[Y]$, provided all expectations exist.
+\end{enumerate}
+\end{definition}
+
+\subsection*{Example: covariance of Brownian motion}
+
+\begin{example}
+Suppose $0 \le s \le t$. Then
+\[
+  \begin{aligned}
+    \mathbb{E}[B_s B_t]
+    &= \mathbb{E}\bigl[B_s (B_t - B_s + B_s)\bigr] \\
+    &= \mathbb{E}\bigl[B_s (B_t - B_s)\bigr] + \mathbb{E}[B_s^2].
+  \end{aligned}
+\]
+Since $B_t - B_s \sim N(0, t-s)$ is independent of $B_s$, and
+$B_s \sim N(0, s)$, the first term is $0$ (independence) and
+\[
+  \mathbb{E}[B_s^2] = \operatorname{Var}(B_s) = s.
+\]
+Hence
+\[
+  \operatorname{Cov}(B_s, B_t) = \mathbb{E}[B_s B_t] = \min(s,t).
+\]
+\end{example}
+
+\end{document}
