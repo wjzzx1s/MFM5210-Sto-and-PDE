@@ -1,0 +1,29 @@
+# LaTeX build artifacts
+*.aux
+*.log
+*.out
+*.toc
+*.nav
+*.snm
+*.vrb
+*.bbl
+*.blg
+*.bcf
+*.run.xml
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.lof
+*.lot
+*.ind
+*.idx
+*.ilg
+*.alg
+
+# Compiled output (source .tex is the deliverable)
+*.pdf
+
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+*.swp
