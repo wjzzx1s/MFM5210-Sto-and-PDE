@@ -1,0 +1,352 @@
+\documentclass{MFM-hw} % You must have the MFM5210.cls file in your project or working directory (i.e. the same directory as this document) 
+
+\HWauthor{Wei Qi}{226010267@link.cuhk.edu.cn} % Put your name and CUHK-SZ e on this line
+\HWno{1} % Enter the number of the homework you are working on
+\HWcourse{MFM 5210} % Enter the course department and number here
+\date{Sep 14, 2026}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{bbm}
+\usepackage{hyperref}
+\newcommand{\E}{\operatorname{E}}
+\newcommand{\N}{\mathcal{N}}
+\newcommand{\dd}{\,\mathrm{d}}
+\newcommand{\EE}{\mathbb{E}}
+\newcommand{\PP}{\mathbb{P}}
+
+
+\begin{document}
+\maketitle
+\HWproblem
+\HWsubproblem
+Which of the following events belong to the $\sigma$-algebra $\mathcal{F}_2$?
+\[
+    \{B_1 \leq 2\},\quad \{|B_2 - B_1| \geq 3\}, \quad \{B_1 \neq B_2\}, \quad\{B_3 \geq 0\}, \quad \{\int_0^3 B_t \mathrm{d}t < 10\}.
+\]
+
+$\{B_1 < 2\} \in \mathcal{F}_2$, for $B_1$ is $\mathcal{F}_1$-measurable and $\mathcal{F}_1 \subset \mathcal{F}_2$. ${|B_2 - B_1| < 2} \in \mathcal{F}_2$, for $B_1, B_2$ are both $\mathcal{F}_2$-measurable. $\{B_1 \neq B_2\} \in \mathcal{F}_2$ for the same reason.$\{B_3 \geq 0\} \not \in \mathcal{F}_2$ for it depends on $B_3$, which is independent of $\mathcal{F}_2$. $\{\int_0^3 B_t \mathrm{d}t < 10\} \not \in \mathcal{F}_2$. The integral uses the path on $[0,3]$, including times after 2, so it is $\mathcal{F}_3$-measurable but not $\mathcal{F}_2$-measurable.
+
+To conlude, the following events belong to $\mathcal{F}_2$
+\[
+\{B_1 \leq 2\},\quad \{|B_2 - B_1| \geq 3\}, \quad \{B_1 \neq B_2\}.
+\]
+while others do not.
+
+\HWsubproblem
+Which of the following random variables are $\mathcal{F}_3$-measurable?
+\[
+    (B_1 + B_2)^2, \quad \sin B_3, \quad B_4 - B_3, \quad \mathbb{E}[B_5^2], \quad \max\limits_{1\leq t\leq 3}B_t, \quad \int_0^3 e^{B_t} \mathrm{d}t.
+\]
+
+Because
+\[
+\mathcal{F}_3 = \sigma\{X_t : t \leq 3\} 
+\]
+contains information available from past to time 3 and $B_4, B_5$ are independent of $\mathcal{F}_3$, the following random variables are  $\mathcal{F}_3$-measurable
+\[
+    (B_1 + B_2)^2, \quad \sin B_3, \quad \max\limits_{1\leq t\leq 3}B_t, \quad \int_0^3 e^{B_t} \mathrm{d}t.
+\]
+while others are not.
+
+\HWproblem
+Fix $0<s<t$.
+
+\HWsubproblem
+What is the distribution of $B_s + B_t$?
+
+\textbf{Lemma:} Let $X$ and $Y$ be independent random variables that are normally distributed. If
+\[
+X \sim N(\mu_X, \sigma^2_X), \quad Y \sim N(\mu_Y, \sigma^2_Y),
+\]
+their sum $Z = X + Y$ satisfies
+\[
+Z \sim N(\mu_X+\mu_Y, \sigma^2_X+\sigma^2_Y).
+\]
+
+\textbf{Proof of lemma:} 
+
+For independent random variables $X$ and $Y$, the distribution $f_Z$ of $Z = X + Y$ equals the
+convolution of $f_X$ and $f_Y$:
+\begin{equation*}
+f_Z(z) = \int_{-\infty}^{\infty} f_Y(z - x)\, f_X(x) \dd x .
+\end{equation*}
+
+Given that $f_X$ and $f_Y$ are normal densities,
+\begin{equation*}
+\begin{aligned}
+f_X(x) &= \N(x; \mu_X, \sigma_X^2) = \frac{1}{\sqrt{2\pi}\,\sigma_X} e^{-(x-\mu_X)^2/(2\sigma_X^2)} \\[5pt]
+f_Y(y) &= \N(y; \mu_Y, \sigma_Y^2) = \frac{1}{\sqrt{2\pi}\,\sigma_Y} e^{-(y-\mu_Y)^2/(2\sigma_Y^2)}
+\end{aligned}
+\end{equation*}
+
+Substituting into the convolution:
+\begin{align*}
+f_Z(z)
+&= \int_{-\infty}^{\infty}
+   \frac{1}{\sqrt{2\pi}\,\sigma_Y}
+   \exp \left[ -\frac{(z-x-\mu_Y)^2}{2\sigma_Y^2} \right]
+   \frac{1}{\sqrt{2\pi}\,\sigma_X}
+   \exp \left[ -\frac{(x-\mu_X)^2}{2\sigma_X^2} \right]
+   \dd x \\[6pt]
+&= \int_{-\infty}^{\infty}
+   \frac{1}{\sqrt{2\pi}\sqrt{2\pi}\,\sigma_X \sigma_Y}
+   \exp \left[ -\frac{\sigma_X^2 (z-x-\mu_Y)^2 + \sigma_Y^2 (x-\mu_X)^2}{2\sigma_X^2 \sigma_Y^2} \right]
+   \dd x \\[6pt]
+&= \int_{-\infty}^{\infty}
+   \frac{1}{\sqrt{2\pi}\sqrt{2\pi}\,\sigma_X \sigma_Y}
+   \exp \left[ -\frac{
+      \begin{aligned}
+        &\sigma_X^2 \left(z^2 + x^2 + \mu_Y^2 - 2xz - 2z\mu_Y + 2x\mu_Y\right) \\
+        &\quad {}+ \sigma_Y^2 \left(x^2 + \mu_X^2 - 2x\mu_X\right)
+      \end{aligned}
+   }{2\sigma_Y^2 \sigma_X^2} \right]
+   \dd x \\[6pt]
+&= \int_{-\infty}^{\infty}
+   \frac{1}{\sqrt{2\pi}\sqrt{2\pi}\,\sigma_X \sigma_Y}
+   \exp \left[ -\frac{
+      \begin{aligned}
+        &x^2 \left(\sigma_X^2 + \sigma_Y^2\right) -
+         2x\left(\sigma_X^2 (z - \mu_Y) + \sigma_Y^2 \mu_X\right) \\
+        &\quad {}+ \sigma_X^2 \left(z^2 + \mu_Y^2 - 2z\mu_Y\right) + \sigma_Y^2 \mu_X^2
+      \end{aligned}
+   }{2\sigma_Y^2 \sigma_X^2} \right]
+   \dd x
+\end{align*}
+
+Defining $\sigma_Z = \sqrt{\sigma_X^2 + \sigma_Y^2}$, and completing the square:
+\begin{align*}
+f_Z(z)
+&= \int_{-\infty}^{\infty}
+   \frac{1}{\sqrt{2\pi}\,\sigma_Z}
+   \frac{1}{\sqrt{2\pi}\,\frac{\sigma_X \sigma_Y}{\sigma_Z}}
+   \exp \left[ -\frac{
+      \begin{aligned}
+        &x^2 - 2x\,\frac{\sigma_X^2 (z - \mu_Y) + \sigma_Y^2 \mu_X}{\sigma_Z^2} \\
+        &\quad {}+ \frac{\sigma_X^2 \left(z^2 + \mu_Y^2 - 2z\mu_Y\right) + \sigma_Y^2 \mu_X^2}{\sigma_Z^2}
+      \end{aligned}
+   }{2\left(\frac{\sigma_X \sigma_Y}{\sigma_Z}\right)^{2}} \right]
+   \dd x \\[6pt]
+&= \int_{-\infty}^{\infty}
+   \frac{1}{\sqrt{2\pi}\,\sigma_Z}
+   \frac{1}{\sqrt{2\pi}\,\frac{\sigma_X \sigma_Y}{\sigma_Z}}
+   \exp \left[ -\frac{
+      \begin{aligned}
+        &\left(x - \frac{\sigma_X^2 (z - \mu_Y) + \sigma_Y^2 \mu_X}{\sigma_Z^2}\right)^{2} \\
+        &\quad {} - \left(\frac{\sigma_X^2 (z - \mu_Y) + \sigma_Y^2 \mu_X}{\sigma_Z^2}\right)^{2} \\
+        &\quad {} + \frac{\sigma_X^2 (z - \mu_Y)^2 + \sigma_Y^2 \mu_X^2}{\sigma_Z^2}
+      \end{aligned}
+   }{2\left(\frac{\sigma_X \sigma_Y}{\sigma_Z}\right)^{2}} \right]
+   \dd x \\[6pt]
+&= \int_{-\infty}^{\infty}
+   \frac{1}{\sqrt{2\pi}\,\sigma_Z}
+   \begin{aligned}[t]
+     &\exp \left[ -\frac{
+        \begin{aligned}
+          &\sigma_Z^2 \left(\sigma_X^2 (z - \mu_Y)^2 + \sigma_Y^2 \mu_X^2\right) \\
+          &\quad {} - \left(\sigma_X^2 (z - \mu_Y) + \sigma_Y^2 \mu_X\right)^{2}
+        \end{aligned}
+     }{2\sigma_Z^2 (\sigma_X \sigma_Y)^{2}} \right] \\[3pt]
+     &\quad \times \frac{1}{\sqrt{2\pi}\,\frac{\sigma_X \sigma_Y}{\sigma_Z}}
+       \exp \left[ -\frac{
+          \left(x - \frac{\sigma_X^2 (z - \mu_Y) + \sigma_Y^2 \mu_X}{\sigma_Z^2}\right)^{2}
+       }{2\left(\frac{\sigma_X \sigma_Y}{\sigma_Z}\right)^{2}} \right]
+   \end{aligned}
+   \dd x \\[6pt]
+&= \frac{1}{\sqrt{2\pi}\,\sigma_Z}
+   \exp \left[ -\frac{(z - (\mu_X + \mu_Y))^2}{2\sigma_Z^2} \right] \notag \\[3pt]
+&\quad \times \int_{-\infty}^{\infty}
+   \frac{1}{\sqrt{2\pi}\,\frac{\sigma_X \sigma_Y}{\sigma_Z}}
+   \exp \left[ -\frac{
+      \left(x - \frac{\sigma_X^2 (z - \mu_Y) + \sigma_Y^2 \mu_X}{\sigma_Z^2}\right)^{2}
+   }{2\left(\frac{\sigma_X \sigma_Y}{\sigma_Z}\right)^{2}} \right]
+   \dd x
+\end{align*}
+
+The expression in the integral is a normal density distribution on $x$, and therefore the integral
+is evaluated to $1$. The desired result follows
+\begin{equation*}
+f_Z(z) = \frac{1}{\sqrt{2\pi}\,\sigma_Z}
+         \exp \left[ -\frac{(z - (\mu_X + \mu_Y))^2}{2\sigma_Z^2} \right]
+\end{equation*}
+which proves that
+\[
+Z \sim N(\mu_X+\mu_Y, \sigma^2_X+\sigma^2_Y).
+\]
+
+\noindent
+(Source of the proof:
+\url{https://en.wikipedia.org/wiki/Sum_of_normally_distributed_random_variables}.)
+
+According to the properties of standard Brownian motion, 
+\[
+B_s \sim N(0,s), \quad (B_t - B_s) \sim N (0, t-s),
+\]
+and $B_s, B_t - B_s$ are independent, which derive that $2B_s \sim N(0, 4s)$ and $2B_s, B_t - B_s$ are independent. According to the lemma,
+\[
+B_s + B_t = 2B_s + (B_s - B_t) \sim N(0, 3s + t),
+\]
+which means $B_s + B_t$ satisfies normal distribution with mean $0$ and variance $3s + t$.
+
+\HWsubproblem
+Compute $\PP\{B_s > 0, B_t - B_s > 0\}$.
+
+$B_s$ and $B_t - B_s$ are independent and satisfy
+\[
+B_s \sim N(0,s), \quad (B_t - B_s) \sim N (0, t-s).
+\]
+Hence
+\[
+\PP\{B_s > 0, B_t - B_s > 0\} = \PP\{B_s > 0\}\PP\{B_t - B_s > 0\} = \frac12 \times \frac12 = \frac14.
+\]
+
+\HWsubproblem
+Compute $\EE[B_2^3B_4]$.
+
+\textbf{Lemma:} Let $\{B_t\}_{t \geq 0}$ be a standard Brownian motion, the $n^{\mathrm{th}}(n \geq 1, n \text{ is integer})$ moment of $B_t$ satisfies
+\[
+    \EE[B_t] = 
+    \begin{cases}
+    0, & n \text{ is odd,} \\
+    (n-1)!t^{n/2}, & n \text{ is even}.
+    \end{cases}
+\]
+
+The lemma is proved in class. And $B_2$ and $B_4 - B_2$ are independent, satisfying
+\[
+B_2 \sim N(0,2), \quad (B_4 - B_2) \sim N (0, 2).
+\]
+So
+\begin{align*}
+    \EE[B_2^3B_4] &= \EE[B_2^3(B_4-B_2+B_2)] = \EE[B_2^3(B_4-B_2) + B_2^4] \\
+                  &= \EE[B_2^3] \EE[B_4-B_2] +\EE[B_2^4],
+\end{align*}
+where according to the lemma
+\[
+    \EE[B_2^3]=0, \quad \EE[B_2^4] = 12,
+\]
+hence
+\[
+    \EE[B_2^3B_4] = \EE[B_2^4] = 12.
+\]
+
+\HWsubproblem
+Compute $\EE[B_1^4B_3^2]$.
+
+$B_1$ and $B_3 - B_1$ are independent, satisfying
+\[
+B_1 \sim N(0,1), \quad (B_3 - B_1) \sim N (0, 2).
+\]
+So
+\begin{align*}
+    \EE[B_1^4B_3^2] &= \EE[B_1^4(B_3-B_1+B_1)^2] = \EE[B_1^4(B_3-B_1)^2+2B_1^5(B_3-B_1)+B_1^6] \\
+                    &= \EE[B_1^4]\EE[(B_3-B_1)^2] + 2\EE[B_1^5]\EE[B_3-B_1] + \EE[B_1^6] \\
+\end{align*}
+where
+\[
+    \EE[B_1^4] = 3, \quad \EE[(B_3-B_1)^2] = 2, \quad \EE[B_1^5] = \EE[B_3-B-1] = 0, \quad \EE[B_1^6] = 15,
+\]
+hence
+\[
+    \EE[B_1^4B_3^2] = 3 \times 2 + 0 + 15 = 21.
+\]
+
+\HWsubproblem
+Compute $\EE[e^{a(B_t-B_s)}]$ for any $a \in \mathbb{R}$.
+
+Let $X = B_t -B_s \sim N(0, t-s)$, the probability density function of $X$ is 
+\[
+    f_X(x) = \frac{1}{\sqrt{2\pi (t-s)}} e^{-\frac{x^2}{2(t-s)}},
+\]
+hence
+\begin{align*}
+    \EE[e^{a(B_t-B_s)}] &= 
+    \EE[e^{a(B_t-B_s)}] = \EE[e^{aX}] = \int_{-\infty}^{+\infty} e^{ax} f_X(x) \dd x  \\
+    &= \int_{-\infty}^{+\infty} \frac{1}{\sqrt{2\pi (t-s)}} e^{-\frac{x^2}{2(t-s)}+ax} \dd x \\
+    &= \int_{-\infty}^{+\infty} \frac{1}{\sqrt{2\pi (t-s)}} e^{-\frac{[x-a(t-s)]^2}{2(t-s)}+\frac{(t-s)a^2}{2}} \dd x \\
+    &= e^{\frac{(t-s)a^2}{2}}\int_{-\infty}^{+\infty} \frac{1}{\sqrt{2\pi (t-s)}} e^{-\frac{[x-a(t-s)]^2}{2(t-s)}} \dd x
+\end{align*}
+
+The expression in the integral is a normal density distribution, and therefore the integral
+is evaluated to 1. The desired result follows
+\[
+    \EE[e^{a(B_t-B_s)}] = e^{\frac{(t-s)a^2}{2}}.
+\]
+
+\HWproblem
+Let $\phi(t)_{t\in[0,5]}$ be the simple process defined by
+\[
+    \phi_t = \mathbbm{1}_{0<t\leq 1} + |B_1|^3 \mathbbm{1}_{1 < t \leq 3} - B_2 e^{-B_3} \mathbbm{1}_{3<t \leq 5}.
+\]
+
+\HWsubproblem
+Is $\phi_t$ predictable? Explain your answer.
+
+Since
+\[
+    a_1 = \mathbbm{1} \in \mathcal{F}_0, \quad a_2 = |B_1|^3 \in \mathcal{F}_1, \quad a_3 = -B_2 e^{-B_3} \in \mathcal{F}_3,
+\]
+$\phi_t$ is predictable.
+
+\HWsubproblem
+Write down the definition of the Itô integral $\int_0^5 \phi_t \dd B_t$. 
+
+The Itô integral $\int_0^5 \phi_t \dd B_t$ is defined as
+\[
+    \int_0^5 \phi_t \dd B_t = (B_1 - B_0) + |B_1|^3 (B_3 - B_1) - B_2 e^{-B_3}(B_5-B_3).
+\]
+
+\HWproblem
+Fix $t>0$. Compute the mean and variance of each of the following integrals.
+
+\HWsubproblem
+$\int_0^{T} B_t^2 \dd B_t$.
+
+First verify that $\{B_{t}^2\}_{t\in[0,t]} \in V(0,t)$. Because $B_t \in \mathcal{F}_t$ for any $t \in [0,t]$, $B_t^2 \in \mathcal{F}_t$ for any $t \in [0,t]$. Additionally, 
+\[
+    \EE[\int_0^T |B_t^2|^2 \dd t] = \int_0^T \EE[B_t^4]\dd t = \int_0^{T} 3t^2 \dd t = T^3 < +\infty,
+\]
+so $\{B_{t}^2\}_{t\in[0,t]} \in V(0,t)$. According to properties of Itô integral,
+\[
+    \EE[\int_0^{T} B_t^2 \dd B_t] = 0, \quad Var[\int_0^{T} B_t^2 \dd B_t] = \EE[(\int_0^{T} B_t^2 \dd B_t)^2] = \EE[\int_0^T |B_t^2|^2 \dd t] = T^3.
+\]
+
+\HWsubproblem
+$\int_0^{T} 2e^{B_t} \dd B_t$
+
+First verify that $\{2e^{B_t}\}_{t\in[0,t]} \in V(0,t)$. Because $B_t \in \mathcal{F}_t$ for any $t \in [0,t]$, $2e^{B_t} \in \mathcal{F}_t$ for any $t \in [0,t]$. Additionally, 
+\[
+    \EE[\int_0^T |2e^{B_t}|^2 \dd t] = \int_0^T \EE[4e^{2B_t}]\dd t = 4\int_0^{T} \EE[e^{2B_t}]\dd t
+\]
+where according to the moment generating function
+\[
+    \EE[e^{2B_t}] = e^{2t},
+\]
+hence
+\[
+    \EE[\int_0^T |2e^{B_t}|^2 \dd t] = 4\int_0^{T} e^{2t} \dd t = 2e^{2T} - 2 < +\infty,
+\]
+so $\{B_{t}^2\}_{t\in[0,t]} \in V(0,t)$. According to properties of Itô integral,
+\[
+    \EE[\int_0^{T} 2e^{B_t} \dd B_t] = 0, \quad Var[\int_0^{T}2e^{B_t} \dd B_t] = \EE[(\int_0^{T} 2e^{B_t} \dd B_t)^2] = \EE[\int_0^T |2e^{B_t}|^2 \dd t] = 2e^{2T} - 2.
+\]
+
+\HWproblem
+Verify that the stochastic process $\{(B_t+t)^2\}_{t \in [0,t]}$ belongs to $V(0,t)$ and compute the mean and variance of $\int_0^{T}(B_t + t)^2 \dd B_t$.
+
+Because $B_t \in \mathcal{F}_t$ for any $t \in [0,t]$, $(B_t+t)^2 \in \mathcal{F}_t$ for any $t \in [0,t]$. Additionally,
+\begin{align*}
+    \EE[\int_0^T |(B_t+t)^2|^2 \dd t] &= \int_0^T \EE[(B_t+t)^4]\dd t = \int_0^T \EE[B_t^4+4B_t^3t + 6B_t^2t^2 + 4B_t t^3 + t^4]\dd t \\
+    & = \int_0^T \EE[B_t^4]\dd t + 4\int_0^T t\EE[B_t^3]\dd t + 6\int_0^T t^2\EE[B_t^2]\dd t + 4\int_0^T t^3 \EE[B_t]\dd t + \int_0^T t^4\dd t\\
+    & = \int_0^{T} 3t^2\dd t + 0 + 6\int_0^{T} t^3 \dd t + 0 + \int_0^{T} t^4 \dd t \\
+    & = T^3 + \frac32 T^4 + \frac15 T^5 < +\infty,
+\end{align*}
+so  $\{(B_t+t)^2\}_{t \in [0,t]}$. According to properties of Itô integral,
+\[
+    \EE[\int_0^{T} (B_t+t)^2 \dd B_t] = 0,
+\]
+\[
+Var[\int_0^{T} (B_t+t)^2 \dd B_t] = \EE[(\int_0^{T} (B_t+t)^2 \dd B_t)^2] = \EE[\int_0^T |(B_t+t)^2|^2 \dd t] = T^3 + \frac32 T^4 + \frac15 T^5.
+\]
+
+
+\end{document}

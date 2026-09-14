@@ -8,6 +8,8 @@ Lecture notes for **MFM5210 — Stochastics and Partial Differential Equations**
 | File | Description |
 |------|-------------|
 | `Lecture-01.tex` | Lecture 1 — Preliminaries (probability space, random variables, measurability & Borel σ-algebra, stochastic processes & filtrations, Brownian motion) |
+| `Lecture-02.tex` | Lecture 2 — Properties of Brownian motion and introduction to Itô calculus|
+| `hw\*`| Homeworks and their latex templates|
 
 ## Building
 
