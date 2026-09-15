@@ -3,7 +3,7 @@
 \HWauthor{Wei Qi}{226010267@link.cuhk.edu.cn} % Put your name and CUHK-SZ e on this line
 \HWno{1} % Enter the number of the homework you are working on
 \HWcourse{MFM 5210} % Enter the course department and number here
-\date{Sep 14, 2026}
+\date{Sep 15, 2026}
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{bbm}
@@ -301,11 +301,11 @@ Fix $t>0$. Compute the mean and variance of each of the following integrals.
 \HWsubproblem
 $\int_0^{T} B_t^2 \dd B_t$.
 
-First verify that $\{B_{t}^2\}_{t\in[0,t]} \in V(0,t)$. Because $B_t \in \mathcal{F}_t$ for any $t \in [0,t]$, $B_t^2 \in \mathcal{F}_t$ for any $t \in [0,t]$. Additionally, 
+First verify that $\{B_{t}^2\}_{t\in[0,T]} \in V(0,T)$. Because $B_t \in \mathcal{F}_t$ for any $t \in [0,T]$, $B_t^2 \in \mathcal{F}_t$ for any $t \in [0,T]$. Additionally, 
 \[
     \EE[\int_0^T |B_t^2|^2 \dd t] = \int_0^T \EE[B_t^4]\dd t = \int_0^{T} 3t^2 \dd t = T^3 < +\infty,
 \]
-so $\{B_{t}^2\}_{t\in[0,t]} \in V(0,t)$. According to properties of Itô integral,
+so $\{B_{t}^2\}_{t\in[0,T]} \in V(0,T)$. According to properties of Itô integral,
 \[
     \EE[\int_0^{T} B_t^2 \dd B_t] = 0, \quad Var[\int_0^{T} B_t^2 \dd B_t] = \EE[(\int_0^{T} B_t^2 \dd B_t)^2] = \EE[\int_0^T |B_t^2|^2 \dd t] = T^3.
 \]
@@ -313,7 +313,7 @@ so $\{B_{t}^2\}_{t\in[0,t]} \in V(0,t)$. According to properties of Itô integra
 \HWsubproblem
 $\int_0^{T} 2e^{B_t} \dd B_t$
 
-First verify that $\{2e^{B_t}\}_{t\in[0,t]} \in V(0,t)$. Because $B_t \in \mathcal{F}_t$ for any $t \in [0,t]$, $2e^{B_t} \in \mathcal{F}_t$ for any $t \in [0,t]$. Additionally, 
+First verify that $\{2e^{B_t}\}_{t\in[0,T]} \in V(0,T)$. Because $B_t \in \mathcal{F}_t$ for any $t \in [0,T]$, $2e^{B_t} \in \mathcal{F}_t$ for any $t \in [0,T]$. Additionally, 
 \[
     \EE[\int_0^T |2e^{B_t}|^2 \dd t] = \int_0^T \EE[4e^{2B_t}]\dd t = 4\int_0^{T} \EE[e^{2B_t}]\dd t
 \]
@@ -325,22 +325,22 @@ hence
 \[
     \EE[\int_0^T |2e^{B_t}|^2 \dd t] = 4\int_0^{T} e^{2t} \dd t = 2e^{2T} - 2 < +\infty,
 \]
-so $\{B_{t}^2\}_{t\in[0,t]} \in V(0,t)$. According to properties of Itô integral,
+so $\{B_{t}^2\}_{t\in[0,T]} \in V(0,T)$. According to properties of Itô integral,
 \[
     \EE[\int_0^{T} 2e^{B_t} \dd B_t] = 0, \quad Var[\int_0^{T}2e^{B_t} \dd B_t] = \EE[(\int_0^{T} 2e^{B_t} \dd B_t)^2] = \EE[\int_0^T |2e^{B_t}|^2 \dd t] = 2e^{2T} - 2.
 \]
 
 \HWproblem
-Verify that the stochastic process $\{(B_t+t)^2\}_{t \in [0,t]}$ belongs to $V(0,t)$ and compute the mean and variance of $\int_0^{T}(B_t + t)^2 \dd B_t$.
+Verify that the stochastic process $\{(B_t+t)^2\}_{t \in [0,T]}$ belongs to $V(0,T)$ and compute the mean and variance of $\int_0^{T}(B_t + t)^2 \dd B_t$.
 
-Because $B_t \in \mathcal{F}_t$ for any $t \in [0,t]$, $(B_t+t)^2 \in \mathcal{F}_t$ for any $t \in [0,t]$. Additionally,
+Because $B_t \in \mathcal{F}_t$ for any $t \in [0,T]$, $(B_t+t)^2 \in \mathcal{F}_t$ for any $t \in [0,T]$. Additionally,
 \begin{align*}
     \EE[\int_0^T |(B_t+t)^2|^2 \dd t] &= \int_0^T \EE[(B_t+t)^4]\dd t = \int_0^T \EE[B_t^4+4B_t^3t + 6B_t^2t^2 + 4B_t t^3 + t^4]\dd t \\
     & = \int_0^T \EE[B_t^4]\dd t + 4\int_0^T t\EE[B_t^3]\dd t + 6\int_0^T t^2\EE[B_t^2]\dd t + 4\int_0^T t^3 \EE[B_t]\dd t + \int_0^T t^4\dd t\\
     & = \int_0^{T} 3t^2\dd t + 0 + 6\int_0^{T} t^3 \dd t + 0 + \int_0^{T} t^4 \dd t \\
     & = T^3 + \frac32 T^4 + \frac15 T^5 < +\infty,
 \end{align*}
-so  $\{(B_t+t)^2\}_{t \in [0,t]}$. According to properties of Itô integral,
+so  $\{(B_t+t)^2\}_{t \in [0,T]}$. According to properties of Itô integral,
 \[
     \EE[\int_0^{T} (B_t+t)^2 \dd B_t] = 0,
 \]
