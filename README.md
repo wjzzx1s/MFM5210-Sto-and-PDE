@@ -1,7 +1,7 @@
 # MFM5210 Stochastics and Partial Differential Equations
 
-Lecture notes for **MFM5210 — Stochastics and Partial Differential Equations**
-(CUHK-Shenzhen), transcribed into LaTeX and compiled with `pdflatex`.
+Lecture notes and homework for **MFM5210 — Stochastics and Partial Differential Equations**
+(CUHK-Shenzhen). Lecture notes are transcribed into LaTeX with AI assistance and compiled with `pdflatex`.
 
 ## Contents
 
