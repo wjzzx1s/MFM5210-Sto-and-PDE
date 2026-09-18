@@ -9,15 +9,14 @@ Lecture notes and homework for **MFM5210 — Stochastics and Partial Differentia
 |------|-------------|
 | `Lecture-01.tex` | Lecture 1 — Preliminaries (probability space, random variables, measurability & Borel σ-algebra, stochastic processes & filtrations, Brownian motion) |
 | `Lecture-02.tex` | Lecture 2 — Properties of Brownian motion and introduction to Itô calculus|
-| `HW\*`| Homeworks and their latex templates|
+| `HW\*`| Homeworks' latex templates|
 
 ## Building
 
 Requires a TeX Live installation with `pdflatex`.
 
 ```sh
-pdflatex -interaction=nonstopmode -halt-on-error Lecture-01.tex
-pdflatex -interaction=nonstopmode -halt-on-error Lecture-01.tex   # run twice for cross-refs
+make all
 ```
 
 ## Notes
