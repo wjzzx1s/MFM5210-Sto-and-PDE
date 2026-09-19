@@ -6,7 +6,7 @@ Lectures-tex := $(foreach n, $(LectureNums), Lecture-$(n).tex)
 HWs-pdf := $(foreach n, $(HWNums), hw$(n).pdf)
 HWs-tex := $(foreach n, $(HWNums), hw$(n).tex)
 
-.PHONY: clean-cache clean-pdf clean-all all
+.PHONY: clean-cache clean-pdf clean-all
 
 all: $(Lectures-pdf) $(HWs-pdf)
 
