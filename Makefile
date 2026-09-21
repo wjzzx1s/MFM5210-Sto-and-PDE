@@ -1,6 +1,6 @@
 Makepdf = pdflatex -interaction=nonstopmode -halt-on-error
 LectureNums := 01 02
-HWNums := 1
+HWNums := 1 2
 HWdir := HW
 
 # Homework sources are accepted in HW/ or in the repository root: VPATH resolves either.

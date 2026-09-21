@@ -1,0 +1,179 @@
+\documentclass{MFM-hw} % You must have the MFM5210.cls file in your project or working directory (i.e. the same directory as this document) 
+
+\HWauthor{Wei Qi}{226010267@link.cuhk.edu.cn} % Put your name and CUHK-SZ e on this line
+\HWno{2} % Enter the number of the homework you are working on
+\HWcourse{MFM 5210} % Enter the course department and number here
+\date{Sep 21, 2026}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{bbm}
+\usepackage{hyperref}
+
+\newcommand{\E}{\operatorname{E}}
+\newcommand{\N}{\mathcal{N}}
+\newcommand{\dd}{\;d}
+\newcommand{\EE}{\mathbb{E}}
+\newcommand{\PP}{\mathbb{P}}
+\newcommand{\Ito}{It\^{o}}
+\newcommand{\realset}{\mathbb{R}}
+
+\begin{document}
+
+\maketitle
+\HWproblem
+Use \Ito's fomula to show that
+\[
+    \int_{0}^{t} B_s^2 \dd B_s = \frac{1}{3}B_t^3 - \int_0^t B_s\dd s,\quad t \ge 0.
+\]\\
+
+\textbf{Proof: }Let $f(x) = \frac{1}{3} x^3$, then $f'(x) = x^2$, $f''(x) = 2x$. By \Ito's fomula,
+\[
+    f(B_t) - f(0) = \int_0^tf'(B_t)\dd B_t + \frac{1}{2}\int_0^{t} f''(B_t) \dd t,
+\]
+which is
+\[
+    \frac{1}{3} B_t^3 = \int_{0}^{t} B_s^2 \dd B_s + \int_0^t B_s\dd s,
+\]
+therefore
+\[
+    \int_{0}^{t} B_s^2 \dd B_s = \frac{1}{3}B_t^3 - \int_0^t B_s\dd s,\quad t \ge 0.
+\]\qed
+
+\HWproblem
+Let $\mu,\sigma \in \realset$ be constants and $X_t = e^{\sigma B_t + \mu t}$ Use \Ito's fomula to show that
+\[
+    X_t = 1 + \int_{0}^{t} (\mu + \frac{1}{2}\sigma^2)X_s\dd s + \int_{0}^{t} \sigma X_s \dd B_s.
+\]\\
+
+\textbf{Proof: }Let $f(x, s) = e^{\sigma x + \mu s}$, then $f_x(x,s) = \sigma f$, $f_s(x,s) = \mu f$ and $f_{xx}(x,s) = \sigma^2 f$. By \Ito's fomula,
+\[
+    df(B_s, s) = f_x(B_s,s)\dd B_s + f_s(B_s, s) \dd s + \frac{1}{2} f_{xx} (B_s, s) \dd s = \sigma f\dd B_s +  \mu f \dd s +  \frac{1}{2} \sigma^2 f \dd s
+\]
+Substitute $f(B_s, s)$ with $X_s$,
+\[
+    dX_s =  \sigma X_s \dd s + (\mu + \frac{1}{2} \sigma^2) X_s \dd s,
+\]
+which is
+\[
+    X_t - X_0 = \int_{0}^{t}\sigma X_s \dd s + \int_0^{t}(\mu + \frac{1}{2} \sigma^2) X_s \dd s,
+\]
+where $X_0 = 1$, and therefore
+\[
+    X_t = 1 + \int_{0}^{t}\sigma X_s \dd s + \int_0^{t}(\mu + \frac{1}{2} \sigma^2) X_s \dd s.
+\]\qed
+
+\HWproblem
+Let $H \in C^1([0,T])$ be a deterministic function. Use \Ito's formula to derive the following integration by parts fomula for $0 \le t \le T$:
+\[
+    \int_{t}^{T} h(s) \dd B_s = h(T)B_T - h(t)B_t - \int_{t}^{T} h'(s) B_s \dd s.
+\]\\
+
+\textbf{Proof: }Let $f(s, x) = h(s)x$, by \Ito's fomula,
+\[
+    df(s, B_s) = \left(\frac{\partial f}{\partial s}(s,B_s)+\frac{1}{2}\frac{\partial^{2}f}{\partial x^2}(s,B_s)\right) \dd s + \frac{\partial f}{\partial x}(s,B_s) \dd B_s = h'(s) B_s \dd s + h(s) \dd B_s,
+\]
+which, integrated from t to T, is
+\[
+    f(T, B_T) - f(t,B_t) = \int_{t}^{T} h'(s)B_s \dd s + \int_t^{T}h(s) \dd B_s,
+\]
+and therefore
+\[
+    \int_{t}^{T} h(s) \dd B_s = h(T)B_T - h(t)B_t - \int_{t}^{T} h'(s) B_s \dd s.
+\]\qed
+
+\HWproblem
+Let $X_t = B_t^2 - t$.
+\HWsubproblem
+Compute $dX_t$.\\
+
+\textbf{Solution: }Let $f(x,t) = x^2 - t$, by \Ito's formula,
+\[
+    dX_t = [f_t(X_t,t) +\frac{1}{2} f_{xx}(X_t, t)] \dd t + f_x(X_t) B_t = (-1 + 1) \dd t + 2B_t \dd B_t = 2B_t \dd B_t.
+\]
+\HWsubproblem
+Compute $dX_t \cdot dX_t$.\\
+
+\textbf{Solution: }
+\[
+    dX_t \cdot dX_t = (2B_t \dd B_t)\cdot(2B_t \dd B_t) = 4 B_t^2 \dd t.
+\]
+
+\HWsubproblem
+Write down the quadratic variation process $\langle X\rangle_t$ as an integral.\\
+
+\textbf{Solution: }
+\[
+    \langle X\rangle_t = \int_0^{t} dB_s \cdot \dd B_s = 4 \int_0^t B_t^2 \dd t.
+\]
+
+\HWproblem
+Let $X = e^{t/2}\cos B_t$. Apply \Ito's fomula to compute $dX_t$ and hence find $\EE[X_t]$.
+
+\textbf{Solution: }Let $f(x, t) = e^{t/2}\cos x$, then $f_x(x, t) = -e^{t/2}\sin x$, $f_{xx}(x,t) = -e^{t/2}\cos x$ and $f_t(x,t) = (e^{t/2}\cos x)/2$. By \Ito's fomula,
+\[
+    dX_t = [f_t(X_t,t) + \frac{1}{2}f_{xx}(X_t,t)]\dd t + f_x(X_t, t)\dd B_t = - e^{t/2}\sin B_t \dd B_t.
+\]
+which is
+\[
+    X_t - X_0 = - \int_{0}^{t} e^{s/2}\sin B_s \dd B_s,
+\]
+where $X_0 = 1$, so
+\[
+    X_t = 1 - \int_{0}^{t} e^{s/2}\sin B_s \dd B_s,
+\]
+by properties of \Ito's integral, $\EE[\int_{0}^{t} e^{s/2}\sin B_s \dd B_s] = 0$, and therefore
+\[
+    \EE[X_t] = 1 - \EE[\int_{0}^{t} e^{s/2}\sin B_s \dd B_s] = 1.
+\]
+
+\HWproblem
+For each random variable $F$ below, find a process  $f_t \in V(0,t)$ such that
+\[
+    F = \EE[F] + \int_{0}^{T} f_t \dd B_t.
+\]
+
+\HWsubproblem
+$F = B_T$.\\
+
+\textbf{Solution: }Because $\EE[B_T] = 0$, let $f_t = 1$ then $f_t \in V(0,T)$ and by \Ito's formula,
+\[
+    B_T  = B_0 + \int_{0}^T \dd B_t = \EE[B_t] + \int_0^{T} f_t \dd B_t.
+\]
+Therefore $f_t = 1$ satisfies the conditions.
+
+\HWsubproblem
+$F = e^T$.\\
+
+\textbf{Solution: }Because $e^T$ is deterministic, $\EE[e^T] = e^T$. Let $f_t = 0$ then $f_t \in V(0,T)$,
+\[
+    e^T  = \EE[e^T] = \EE[e^T] + \int_0^{T}0\dd B_t = \EE[e^T] + \int_0^{T} f_t\dd B_t.
+\]
+Therefore $f_t = 0$ satisfies the conditions.
+
+\HWsubproblem
+$F = \int_0^{T} B_t \dd t$.\\
+
+\textbf{Solution: }By Fubini's theorem,
+\[
+    \EE [\int_0^{T} B_t \dd t] = \int_0^T\EE[B_t]\dd t = 0.
+\]
+Use the conclusion of Problem 3,
+\[
+    \int_{t}^{T} h(s) \dd B_s = h(T)B_T - h(t)B_t - \int_{t}^{T} h'(s) B_s \dd s.
+\]
+let $t = 0$, $h(s) = s$, and we have
+\[
+    \int_{0}^{T} s \dd B_s = TB_T - h(0)B_0 - \int_{0}^{T} B_s \dd s.
+\]
+which is
+\[
+    \int_{0}^{T} B_t \dd t = TB_T - \int_{0}^{T} t \dd B_t = T\int_{0}^{T} \dd B_t - \int_{0}^{T} t \dd B_t  = \int_0^{T}(T-t)\dd B_t.
+\]
+Therefore, $f_t = T-t$ satisfies the conditions.
+
+
+
+
+\end{document}
