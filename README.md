@@ -18,6 +18,7 @@ AI assistance and compiled with `pdflatex`; the homework is solved in the same L
 | `Lecture-01.tex` | Lecture 1 (Sept 7, 2026) — *Preliminaries*: probability spaces, random variables, measurability and the Borel sigma-algebra, stochastic processes and filtrations, Brownian motion. Compiles to `Lecture-01.pdf`. |
 | `Lecture-02.tex` | Lecture 2 (Sept 14, 2026) — properties of Brownian motion, worked examples, and Itô calculus up to the Itô integral. Compiles to `Lecture-02.pdf`. |
 | `HW/hw1.tex` | Homework 1 solutions (Sept 15, 2026), built on the homework class. Compiles to `hw1.pdf` in the repository root. |
+| `HW/hw2.tex` | Homework 2 solutions (Sept 21, 2026), built on the homework class. Compiles to `hw2.pdf` in the repository root. |
 | `MFM-hw.cls` | Homework document class: title block, problem and subproblem counters/macros, page headers. |
 | `Makefile` | Build driver for every lecture and homework (see below). |
 | `.gitignore` | LaTeX build artifacts and compiled PDFs; only the sources are tracked. |
@@ -38,7 +39,7 @@ pulls in `ifthen`, `titlesec` and `fancyhdr` on its own.
 ```sh
 make                     # the default target, the same as `make all`
 make Lecture-01.pdf      # one lecture (the same as: make Lecture-01)
-make hw1.pdf             # one homework set
+make hw1.pdf             # one homework set (likewise hw2.pdf)
 make all                 # every source listed in LectureNums / HWNums
 make clean-cache         # removes *.aux *.log *.out *.toc
 make clean-pdf           # removes *.pdf
@@ -53,7 +54,7 @@ How the rules behave (verified with `make clean-all && make all`):
 * Homework sources are located through `VPATH` plus an exported `TEXINPUTS`, so `hwM.tex` builds
   from `HW/` or from the root, and `MFM-hw.cls` is found in either layout; `hwM.pdf` is written to
   the repository root.
-* `LectureNums := 01 02` and `HWNums := 1` are the list of record. A listed number that has no
+* `LectureNums := 01 02` and `HWNums := 1 2` are the list of record. A listed number that has no
   source is reported as `no source found … - skipped` instead of breaking the build, so a lecture
   or homework number can be announced in advance.
 
@@ -115,19 +116,31 @@ pdflatex Lecture-01.tex && pdflatex Lecture-01.tex   # the same by hand
 | 4 | Mean and variance of stochastic integrals of the form $\int_0^T f(B_t)\mathrm{d}B_t$, via the Itô isometry. |
 | 5 | Whether $(B_t+t)^2$ belongs to $V(0,T)$, and the mean and variance of its Itô integral. |
 
+`HW/hw2.tex` solves six problems that apply Itô's formula and the integration by parts of the Itô
+integral:
+
+| Problem | Content |
+| --- | --- |
+| 1 | Apply Itô's formula to $f(x)=x^3/3$ to show $\\int_0^t B_s^2\\,\\mathrm{d}B_s = \\frac{1}{3}B_t^3 - \\int_0^t B_s\\,\\mathrm{d}s$. |
+| 2 | The exponential $X_t = \\exp(\\sigma B_t + \\mu t)$: $\\mathrm{d}X_t = \\sigma X_t\\,\\mathrm{d}B_t + (\\mu+\\frac{1}{2}\\sigma^2)X_t\\,\\mathrm{d}t$, hence $X_t = 1 + \\int_0^t (\\mu+\\frac{1}{2}\\sigma^2)X_s\\,\\mathrm{d}s + \\int_0^t \\sigma X_s\\,\\mathrm{d}B_s$. |
+| 3 | Integration by parts for $h \\in C^1([0,T])$: $\\int_t^T h(s)\\,\\mathrm{d}B_s = h(T)B_T - h(t)B_t - \\int_t^T h'(s)B_s\\,\\mathrm{d}s$. |
+| 4 | $X_t = B_t^2 - t$: $\\mathrm{d}X_t = 2B_t\\,\\mathrm{d}B_t$, $\\mathrm{d}X_t\\cdot\\mathrm{d}X_t = 4B_t^2\\,\\mathrm{d}t$, and the quadratic variation $\\langle X\\rangle_t = 4\\int_0^t B_s^2\\,\\mathrm{d}s$. |
+| 5 | $X_t = e^{t/2}\\cos B_t$: $\\mathrm{d}X_t = -e^{t/2}\\sin B_t\\,\\mathrm{d}B_t$, so the process is a martingale with $\\mathbb{E}[X_t] = 1$. |
+| 6 | Find $f_t \\in V(0,T)$ with $F = \\mathbb{E}[F] + \\int_0^T f_t\\,\\mathrm{d}B_t$: $F = B_T$ gives $f_t = 1$; $F = e^T$ is deterministic and gives $f_t = 0$; $F = \\int_0^T B_t\\,\\mathrm{d}t$ gives $f_t = T-t$, by integrating by parts (Problem 3). |
+
 The homework is typeset with `MFM-hw.cls`: its title-block macros take the author name and e-mail,
 the homework number and the course, and its two problem macros number the problems and the
 subproblems (the class is a local style file, kept at the repository root so both layouts compile).
 
 ## Status
 
-* Transcribed: Lecture 1, Lecture 2; homework 1 complete.
-* Pending: Lecture 3 onwards, homework 2 onwards — add the numbers to `LectureNums` / `HWNums`,
+* Transcribed: Lecture 1, Lecture 2; homework 1 and homework 2 complete.
+* Pending: Lecture 3 onwards, homework 3 onwards — add the numbers to `LectureNums` / `HWNums`,
   drop the sources in place, and `make all` picks them up.
 * The lecture notes are **transcribed from handwritten notes with AI assistance**, so the content
   needs to be checked against the originals; the blue annotations mark the places added by the
   editor. The commit history records the corrections made so far (typos in Homework 1, a missing
-  exponent in the normality lemma, the title of Lecture 2).
+  exponent in the normality lemma, the title of Lecture 2, the Itô-formula terms in Homework 2).
 
 ## License
 
