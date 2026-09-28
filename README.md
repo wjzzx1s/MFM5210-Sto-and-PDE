@@ -21,6 +21,7 @@ AI assistance and compiled with `pdflatex`; the homework is solved in the same L
 | `Lecture-04.tex` | Lecture 4 (Sept 28, 2026) — *multi-dimensional Itô calculus and SDEs*: vector-valued Itô integrals, the general Itô formula in $\mathbb{R}^n$, the product rule, stochastic differential equations with their strong solutions (geometric Brownian motion, Ornstein–Uhlenbeck), and the existence and uniqueness theorems. Compiles to `Lecture-04.pdf`. |
 | `HW/hw1.tex` | Homework 1 solutions (Sept 15, 2026), built on the homework class. Compiles to `hw1.pdf` in the repository root. |
 | `HW/hw2.tex` | Homework 2 solutions (Sept 21, 2026), built on the homework class. Compiles to `hw2.pdf` in the repository root. |
+| `HW/hw3.tex` | Homework 3 solutions (Sept 28, 2026), built on the homework class. Compiles to `hw3.pdf` in the repository root. |
 | `MFM-hw.cls` | Homework document class: title block, problem and subproblem counters/macros, page headers. |
 | `Makefile` | Build driver for every lecture and homework (see below). |
 | `.gitignore` | LaTeX build artifacts and compiled PDFs; only the sources are tracked. |
@@ -43,7 +44,7 @@ additionally pulls in `ifthen`, `titlesec` and `fancyhdr` on its own.
 ```sh
 make                     # the default target, the same as `make all`
 make Lecture-01.pdf      # one lecture (the same as: make Lecture-01)
-make hw1.pdf             # one homework set (likewise hw2.pdf)
+make hw1.pdf             # one homework set (likewise hw2.pdf, hw3.pdf)
 make all                 # every source listed in LectureNums / HWNums
 make clean-cache         # removes *.aux *.log *.out *.toc
 make clean-pdf           # removes *.pdf
@@ -59,7 +60,7 @@ How the rules behave (verified with `make clean-all && make all`):
 * Homework sources are located through `VPATH` plus an exported `TEXINPUTS`, so `hwM.tex` builds
   from `HW/` or from the root, and `MFM-hw.cls` is found in either layout; `hwM.pdf` is written to
   the repository root.
-* `LectureNums := 01 02 03 04` and `HWNums := 1 2` are the list of record. A listed number that has
+* `LectureNums := 01 02 03 04` and `HWNums := 1 2 3` are the list of record. A listed number that has
   no source is reported as `no source found … - skipped` instead of breaking the build, so a
   lecture or homework number can be announced in advance.
 
@@ -179,14 +180,25 @@ integral:
 | 5 | $X_t = e^{t/2}\\cos B_t$: $\\mathrm{d}X_t = -e^{t/2}\\sin B_t\\,\\mathrm{d}B_t$, so the process is a martingale with $\\mathbb{E}[X_t] = 1$. |
 | 6 | Find $f_t \\in V(0,T)$ with $F = \\mathbb{E}[F] + \\int_0^T f_t\\,\\mathrm{d}B_t$: $F = B_T$ gives $f_t = 1$; $F = e^T$ is deterministic and gives $f_t = 0$; $F = \\int_0^T B_t\\,\\mathrm{d}t$ gives $f_t = T-t$, by integrating by parts (Problem 3). |
 
+`HW/hw3.tex` solves five problems on strong solutions and on when the existence and uniqueness
+theorem of Lecture 4 applies:
+
+| Problem | Content |
+| --- | --- |
+| 1 | $X_t = e^{t^2/2}(1+B_t)$ is a strong solution of $\\mathrm{d}X_t = tX_t\\,\\mathrm{d}t + e^{t^2/2}\\,\\mathrm{d}B_t$ with $X_0 = 1$. |
+| 2 | The Ornstein–Uhlenbeck SDE $\\mathrm{d}X_t = (-\\alpha X_t+\\beta)\\,\\mathrm{d}t + \\sigma\\,\\mathrm{d}B_t$: (a) verification of the explicit solution $X_t = e^{-\\alpha t}[x_0+\\frac{\\beta}{\\alpha}(e^{\\alpha t}-1)] + \\sigma e^{-\\alpha t}\\int_0^t e^{\\alpha s}\\,\\mathrm{d}B_s$; (b) uniqueness, from the uniform Lipschitz and linear growth conditions on $a(t,x) = -\\alpha x+\\beta$ and $b(t,x) = \\sigma$; (c) $\\mathbb{E}[X_t] = e^{-\\alpha t}[x_0+\\frac{\\beta}{\\alpha}(e^{\\alpha t}-1)]$ and $\\mathrm{Var}(X_t) = \\frac{\\sigma^2}{2\\alpha}(1-e^{-2\\alpha t})$. |
+| 3 | A general scalar SDE with smooth coefficients and $\\sigma(x) \\ge \\varepsilon > 0$: (a) $\\mathrm{d}f(X_t) = [f'(X_t)a(X_t)+\\frac{1}{2}f''(X_t)\\sigma^2(X_t)]\\,\\mathrm{d}t + f'(X_t)\\sigma(X_t)\\,\\mathrm{d}B_t$; (b) the transform that normalises the diffusion — $f(x) = f(0)+\\int_0^x\\frac{\\mathrm{d}u}{\\sigma(u)}$ and $b(x) = \\frac{a(f^{-1}(x))}{\\sigma(f^{-1}(x))}-\\frac{1}{2}\\sigma'(f^{-1}(x))$ give $Y_t = f(X_t)$ solving $Y_t = Y_0+\\int_0^t b(Y_s)\\,\\mathrm{d}s + B_t$. |
+| 4 | The non-uniqueness example $\\mathrm{d}X_t = 3X_t^{1/3}\\,\\mathrm{d}t + 3X_t^{2/3}\\,\\mathrm{d}B_t$, $X_0 = 0$: $X_t = B_t^3$ is a strong solution, and so is $X_t = 0$ — $\\sigma(x) = 3x^{2/3}$ is not Lipschitz at the origin, so the theorem used in Problem 2 does not apply. |
+| 5 | A three-dimensional linear SDE with the constant matrices $\\boldsymbol{A}$, $\\boldsymbol{U}$, $\\boldsymbol{V}$: (a) the system $\\mathrm{d}X_1 = X_1\\,\\mathrm{d}B_1 - X_2\\,\\mathrm{d}B_2$, $\\mathrm{d}X_2 = X_2\\,\\mathrm{d}B_1 + X_1\\,\\mathrm{d}B_2$, $\\mathrm{d}X_3 = \\frac{X_3}{2}\\,\\mathrm{d}t + X_3\\,\\mathrm{d}B_1$; (b) the strong solution $X_1 = e^{B_1}\\cos B_2$, $X_2 = e^{B_1}\\sin B_2$, $X_3 = e^{B_1}$ starting from $\\vec{x}_0 = [1,0,1]^{T}$. |
+
 The homework is typeset with `MFM-hw.cls`: its title-block macros take the author name and e-mail,
 the homework number and the course, and its two problem macros number the problems and the
 subproblems (the class is a local style file, kept at the repository root so both layouts compile).
 
 ## Status
 
-* Transcribed: Lectures 1 to 4; homework 1 and homework 2 complete.
-* Pending: Lecture 5 onwards, homework 3 onwards — add the numbers to `LectureNums` / `HWNums`,
+* Transcribed: Lectures 1 to 4; homework 1 to homework 3 complete.
+* Pending: Lecture 5 onwards, homework 4 onwards — add the numbers to `LectureNums` / `HWNums`,
   drop the sources in place, and `make all` picks them up.
 * Lecture 3 opens with a recap section rather than with new material: pages 1–2 of the handwritten
   notes repeat the closing content of Lecture 2 (the proposition, its Fubini remark, the three
@@ -201,7 +213,8 @@ subproblems (the class is a local style file, kept at the repository root so bot
   needs to be checked against the originals; the red editor's notes mark the places added by the
   editor, and the blue annotations reproduce the blue ink of the originals. The commit history
   records the corrections made so far (typos in Homework 1, a missing exponent in the normality
-  lemma, the title of Lecture 2, the Itô-formula terms in Homework 2).
+  lemma, the title of Lecture 2, the Itô-formula terms in Homework 2, the Itô isometry and the
+  quadratic variation in Homework 3).
 
 ## License
 
