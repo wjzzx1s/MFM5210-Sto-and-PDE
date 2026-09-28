@@ -1,0 +1,396 @@
+\documentclass{MFM-hw} % You must have the MFM5210.cls file in your project or working directory (i.e. the same directory as this document) 
+
+\HWauthor{Wei Qi}{226010267@link.cuhk.edu.cn} % Put your name and CUHK-SZ e-mail on this line
+\HWno{3} % Enter the number of the homework you are working on
+\HWcourse{MFM 5210} % Enter the course department and number here
+\date{Sep 28, 2026}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{bbm}
+\usepackage{hyperref}
+\usepackage{cases}
+
+\newcommand{\E}{\operatorname{E}}
+\newcommand{\Var}{\operatorname{Var}}
+\newcommand{\filtration}{\mathcal{F}_t}
+\newcommand{\N}{\mathcal{N}}
+\newcommand{\dd}{\;\mathrm{d}}
+\newcommand{\EE}{\mathbb{E}}
+\newcommand{\PP}{\mathbb{P}}
+\newcommand{\Ito}{It\^{o}}
+\newcommand{\realset}{\mathbb{R}}
+
+\begin{document}
+
+\maketitle
+
+Unless otherwise specified, $\{B_t\}_{t \ge 0}$ always denotes a standard Brownian motion and $\{ \filtration \}_{t \ge 0}$
+denotes its natural filtration.
+
+\HWproblem
+Let $X_t = e^{t^2/2}(1+B_t)$. Verify that $X_t$ is a strong solution to the SDE
+\[
+\begin{cases}
+    \dd X_t = tX_t\dd t + e^{t^2/2} \dd B_t,  \quad t\ge 0,\\
+     X_0 = 1
+\end{cases}
+\]
+
+\textbf{Proof: }Firstly $X_t$ is a function of $t$ and $B_t$, so $X_t$ is $\filtration$-measurable for any $t \ge 0$. And $X_0 = 1$. Let $f(t,x) = e^{t^2/2}(1+x)$ so that $X_t = f(t,B_t)$, then
+\[
+\begin{cases}
+    f_t = te^{t^2/2}(1+x), \\
+    f_x = e^{t^2/2}, \\
+    f_{xx} = 0. 
+\end{cases}
+\]
+By \Ito's formula
+\begin{align*}
+    \dd X_t &= (f_t(t,B_t) + \frac12 f_{xx}(t,B_t))\dd t + f_x(t,B_t) \dd B_t \\
+    & = te^{t^2/2}(1+B_t) \dd t + e^{t^2/2} \dd B_t\\
+    & = tX_t \dd t + e^{t^2/2} \dd B_t,
+\end{align*}
+which is
+\[
+    X_t = 1 + \int_0^{t} uX_u \dd u + \int_0^t e^{u^2/2} \dd B_u.
+\]\qed
+
+\HWproblem
+Let $X_0 \in \realset$, $\sigma > 0$, $\alpha > 0$, $\beta > 0$ be constants. Let
+\[
+    X_t = e^{-\alpha t} \left[ x_0 + \frac{\beta}{\alpha}(e^{\alpha t }-1)+\sigma \int_0^t e^{\alpha s} \dd B_s \right].
+\]
+
+\HWsubproblem
+Verify that $X_t$ is a strong solution to the SDE
+\[
+\begin{cases}
+    \dd X_t = (-\alpha X_t + \beta)\dd t + \sigma \dd B_t,  \quad t\ge 0,\\
+     X_0 = x_0
+\end{cases}
+\]
+
+\textbf{Proof: } Firstly $X_t$ is $\filtration$-measurable and $X_0 = x_0$. Let $Y_t = \int_0^t e^{\alpha s} \dd B_s$, then $Y_t$ is an {\Ito} process and $\dd Y_t = e^{\alpha t} \dd B_t$. Write $X_t$ as
+\[
+    X_t = \frac{\beta}{\alpha} + e^{-\alpha t}(x_0 - \frac{\beta}{\alpha}) + \sigma e^{-\alpha t} Y_t.
+\]
+Let $f(t, y) = \frac{\beta}{\alpha} + e^{-\alpha t}(x_0 - \frac{\beta}{\alpha}) + \sigma e^{-\alpha t} y$, then $X_t = f(t, Y_t)$ and
+\[
+\begin{cases}
+    f_t(t,y) = -\alpha e^{-\alpha t}(x_0 - \frac{\beta}{\alpha}) - \sigma \alpha e^{-\alpha t} y = -\alpha f(t,y) + \beta,\\
+    f_y(t,y) = \sigma e^{-\alpha t}, \\
+    f_{yy} (t, y) = 0.
+\end{cases}
+\]
+By \Ito's formula,
+\[
+    \dd X_t = f_t(t,Y_t) \dd t + f_y(t,Y_t) \dd Y_t + f_{yy}(t,Y_t) \dd Y_t \cdot \dd Y_t,
+\]
+where
+\[
+    \dd Y_t = e^{\alpha t} \dd B_t \quad \text{  and  }\quad \dd Y_t \cdot \dd Y_t = e^{2\alpha t} \dd t,
+\]
+hence
+\[
+    \dd X_t = (-\alpha X_t + \beta) \dd t + \sigma e^{-\alpha t} \cdot e^{\alpha t} \dd B_t = (-\alpha X_t + \beta) \dd t + \sigma \dd B_t,
+\]
+which is
+\[
+    X_t = x_0 + \int_0^{t} (-\alpha X_t + \beta) \dd t + \int_0^{t} \sigma \dd B_t.
+\]\qed
+
+\HWsubproblem
+Is the solution unique? Explain your answer.\\
+
+\textbf{Proof: }Let $\mu(t,x) = -\alpha x + \beta$ and $\sigma(t,x) = \sigma$. Then for any $t>0$, $x>0$, $y>0$, 
+\[
+    |\mu(t,x) - \mu(t,y)| + |\sigma(t,x) - \sigma(t,y)| = \alpha |x-y| \le \alpha |x - y|,
+\]
+which satisfies uniform Lipschitz condition and
+\[
+    |\mu(t,x)| + |\sigma(t,x)| = |-\alpha x + \beta| + \sigma \le \alpha x + \beta + \sigma \le (\alpha + \beta + \sigma) (1 + |x|), 
+\]
+which satisfies uniform linear condition. Therefore, the solution is unique. \qed
+
+\HWsubproblem
+Compute $\EE[X_t]$ and $\Var(X_t)$.\\
+
+\textbf{Solution: }Fix $t$, then
+\[
+    \EE[X_t] = e^{-\alpha t} \left[ x_0 + \frac{\beta}{\alpha}(e^{\alpha t }-1) \right] + \sigma e^{-\alpha t} \EE\left[\int_0^t e^{\alpha s} \dd B_s\right],
+\]
+and
+\[
+    \Var(X_t) = \sigma^2 e^{-2\alpha t} \Var\left(\int_0^t e^{\alpha s} \dd B_s\right).
+\]
+By properties of \Ito's integral,
+\[
+    \EE\left[\int_0^t e^{\alpha s} \dd B_s\right] = 0,
+\]
+and
+\[
+    \Var\left(\int_0^t e^{\alpha s} \dd B_s\right) = \EE\left[(\int_0^t e^{\alpha s} \dd B_s)^2\right] = \int_0^t \EE[e^{2\alpha s}] \dd s = \int_0^t e^{\alpha s} \dd s = \frac{1}{\alpha} (e^{\alpha t} - 1). 
+\]
+Hence
+\[
+    \EE[X_t] = e^{-\alpha t} \left[ x_0 + \frac{\beta}{\alpha}(e^{\alpha t }-1) \right],
+\]
+and
+\[
+    \Var(X_t) = \frac{\sigma^2}{\alpha} (e^{-\alpha t} - e^{-2\alpha t}).
+\]
+
+\HWproblem
+Let $X_t$ be a continuous process satisfying
+\[
+    \begin{cases}
+        \dd X_t = a(X_t) \dd t + \sigma(X_t) \dd B_t, \\
+        X_0 = 0,
+    \end{cases}
+\]
+where $a(x)$ and $\sigma(x)$ are smooth functions and $\sigma(x) \ge \varepsilon > 0$ for all $x \in \realset$.
+
+\HWsubproblem
+Let $f(x)$ be a $C^2$ function. Use \Ito’s formula to compute $\dd f(X_t)$.\\
+
+\textbf{Solution: }By \Ito's formula,
+\begin{align*}
+    \dd f(X_t) &= f'(X_t) \dd X_t + \frac{1}{2} f''(X_t) \dd X_t \cdot \dd X_t \\
+    & = f'(X_t) [a(X_t) \dd t + \sigma(X_t) \dd B_t] + \frac{1}{2} f''(X_t) \sigma^2(X_t) \dd t \\
+    & = [f'(X_t)a(X_t) + \frac{1}{2}f''(X_t)\sigma^2(X_t)]\dd t + f'(X_t)\sigma(X_t) \dd B_t.
+\end{align*}
+where
+\[
+    \dd X_t \cdot \dd X_t = [a(X_t) \dd t + \sigma(X_t) \dd B_t][a(X_t) \dd t + \sigma(X_t) \dd B_t] = \sigma^2(X_t) \dd B_t.
+\]
+
+\HWsubproblem
+Find two functions $f(x)$ and $b(x)$, where $f$ is increasing and $b$ is smooth, such that the process $Y_t = f(X_t)$ satisfies
+\[
+    Y_t = Y_0 + \int_{0}^{t} b(Y_s) \dd s + B_t.
+\]\\
+
+\textbf{Solution: }The above equation can be written as
+\[
+    \dd f(X_t) = b(f(X_t)) \dd t + \dd B_t,
+\]
+use the result of subproblem(a) and we have
+\[
+    [f'(X_t)a(X_t) + \frac{1}{2}f''(X_t)\sigma^2(X_t)]\dd t + f'(X_t)\sigma(X_t) \dd B_t = b(Y_t) \dd t + \dd B_t,
+\]
+which is equivalent to
+\begin{numcases}{}
+    f'(X_t)a(X_t) + \frac{1}{2}f''(X_t)\sigma^2(X_t) = b(f(X_t)),\\
+    f'(X_t)\sigma(X_t) = 1.
+\end{numcases}
+
+From (2) we can get
+\[
+    f'(x) = \frac{1}{\sigma(x)},
+\]
+for $\sigma(x) \ge \varepsilon > 0$, $0 < f'(x) \le 1/\varepsilon$, so $f(x)$ is increasing and 
+\[
+    f(x) = f(0) + \int_0^x \frac{1}{\sigma(u)} \dd u.
+\]
+
+And therefore
+\[
+    f''(x) = -\frac{\sigma'(x)}{\sigma^2(x)}.
+\]
+Substitute the above equations into (1) and we get
+\[
+    b(f(x)) = \frac{a(x)}{\sigma(x)} - \frac{1}{2}\sigma'(x),
+\]
+because $f(x)$ is increasing, its inverse function $f^{-1}(x)$ exists and
+\[
+    b(x) = \frac{a(f^{-1}(x))}{\sigma(f^{-1}(x))} - \frac{1}{2}\sigma'(f^{-1}(x)).
+\]
+
+In summary, 
+\[
+    f(x) = f(0) + \int_0^x \frac{1}{\sigma(u)} \dd u, \quad
+    b(x) = \frac{a(f^{-1}(x))}{\sigma(f^{-1}(x))} - \frac{1}{2}\sigma'(f^{-1}(x)),
+\]
+where $f(0)$ can take any value.
+
+\HWproblem
+Consider the SDE
+\[
+\begin{cases}
+    \dd X_t = 3 X_t^{1/3} \dd t + 3 X_t^{2/3} \dd B_t, \quad t \ge 0,\\
+    X_0 = 0.
+\end{cases}
+\]
+\HWsubproblem
+Verify that $X_t = B_t^3$ is a strong solution.\\
+
+\textbf{Proof: }Firstly $X_t = B_t^3$ is $\filtration$-measurable and $X_0 = 0$. Let $f(x) = x^3$, then $X_t = f(B_t)$. By \Ito's formula,
+\[
+    \dd X_t = f'(B_t)\dd B_t + \frac{1}{2} f''(B_t)\dd t = 3B_t \dd B_t + 3B_t^2 \dd B_t = 3 X_t^{1/3} \dd t + 3X_t^{2/3} \dd B_t,
+\]
+which is
+\[
+    X_t = 0 + \int_0^t 3X_t^{1/3} \dd t + \int_0^{t} 3 X_t^{2/3} \dd B_t.
+\]\qed
+
+\HWsubproblem
+Show that solutions are not unique.\\
+
+\textbf{Proof: } $X_t = 0$ is another trivial strong solution. Therefore the solutions are not unique. \qed
+
+\HWproblem
+Let $\vec{B}(t) = (B_1(t), B_2(t))$ be a Brownian motion in $\realset^2$
+(starting at the origin $\vec{0}$). Let $\vec{X}(t)$ be an $\realset^3$-valued process and consider the SDE
+\[
+    \begin{cases}
+        \dd \vec{X}(t) = \boldsymbol{A} \vec{X}(t) \dd t + \boldsymbol{U} \vec{X}(t) \dd B_1(t) + \boldsymbol{V} \vec{X}(t) \dd B_2(t),\\
+        \vec{X}(0) = \vec{x}_0,
+    \end{cases}
+\]
+where 
+\[
+    \vec{x}_0 = 
+        \begin{bmatrix}
+            1 \\
+            0 \\
+            1
+        \end{bmatrix}, \quad
+    \boldsymbol{A} = 
+        \begin{bmatrix}
+            0 & 0 & 0 \\
+            0 & 0 & 0 \\
+            0 & 0 & 1/2
+        \end{bmatrix}, \quad
+    \boldsymbol{U} = 
+        \begin{bmatrix}
+            1 & 0 & 0 \\
+            0 & 1 & 0 \\
+            0 & 0 & 1
+        \end{bmatrix}, \quad
+    \boldsymbol{V} = 
+        \begin{bmatrix}
+            0 & -1 & 0 \\
+            1 & 0 & 0 \\
+            0 & 0 & 0
+        \end{bmatrix}. \quad
+\]
+
+\HWsubproblem
+ Write the above SDE in the form of a system of three equations.\\
+
+ \textbf{Solution: }Write the SDE as
+ \begin{align*}
+     \begin{bmatrix}
+        \dd X_1(t) \\
+        \dd X_2(t) \\
+        \dd X_3(t)
+    \end{bmatrix}
+    &= 
+    \begin{bmatrix}
+        0 & 0 & 0 \\
+        0 & 0 & 0 \\
+        0 & 0 & 1/2
+    \end{bmatrix}
+    \begin{bmatrix}
+        X_1(t) \\
+        X_2(t) \\
+        X_3(t)
+    \end{bmatrix} \mathrm{d} t
+    +
+    \begin{bmatrix}
+        1 & 0 & 0 \\
+        0 & 1 & 0 \\
+        0 & 0 & 1
+    \end{bmatrix}
+    \begin{bmatrix}
+        X_1(t) \\
+        X_2(t) \\
+        X_3(t)
+    \end{bmatrix} \mathrm{d} B_1(t)
+    +
+    \begin{bmatrix}
+        0 & -1 & 0 \\
+        1 & 0 & 0 \\
+        0 & 0 & 0
+    \end{bmatrix}
+    \begin{bmatrix}
+        X_1(t) \\
+        X_2(t) \\
+        X_3(t)
+    \end{bmatrix} \mathrm{d} B_2(t) \\
+    &=
+    \begin{bmatrix}
+        0 \\
+        0 \\
+         X_3(t)/2 \dd t
+    \end{bmatrix}
+    +
+    \begin{bmatrix}
+        X_1(t) \dd B_1(t)\\
+        X_2(t) \dd B_1(t)\\
+        X_3(t) \dd B_1(t)
+    \end{bmatrix}
+    +
+    \begin{bmatrix}
+        -X_2(t) \dd B_2(t)\\
+        X_1(t) \dd B_2(t)\\
+        0
+    \end{bmatrix}\\
+    &=
+    \begin{bmatrix}
+        X_1(t) \dd B_1(t) -X_2(t) \dd B_2(t)\\
+        X_2(t) \dd B_1(t)+X_1(t)\dd B_2(t)\\
+        X_3(t)/2 \dd t + X_3(t)\dd B_1(t)
+    \end{bmatrix},
+ \end{align*}
+which can be written as a system of three SDEs
+\[
+    \begin{cases}
+        \dd X_1(t) = X_1(t) \dd B_1(t) -X_2(t) \dd B_2(t), \\
+        \dd X_2(t) = X_2(t) \dd B_1(t)+X_1(t)\dd B_2(t), \\
+        \dd X_3(t) = X_3(t)/2 \dd t + X_3(t)\dd B_1(t),
+    \end{cases}
+\]
+with initial position $\vec{X}(0) = [1,0,1]^{T}$.
+
+\HWsubproblem
+Verify that the process
+\[
+ \vec{X}(t) = 
+ \begin{bmatrix}
+     X_1(t) \\
+     X_2(t) \\
+     X_3(t) 
+ \end{bmatrix}
+ =
+ \begin{bmatrix}
+     e^{B_1(t)} \cos B_2(t) \\
+     e^{B_1(t)} \sin B_2(t) \\
+     e^{B_1(t)}
+ \end{bmatrix}
+\]
+is a strong solution to the SDE.\\
+
+\textbf{Proof: }Firstly, $\vec{X}(t)$ is $\filtration$-adapted and $\vec{X}_0 = [1,0,1]^{T} = \vec{x}_0$.
+
+Let $f_1(x, y) = e^x \cos y$, $f_2(x,y) = e^x \sin y$, $f_3(x,y) = e^x$. Then $X_i(t) = f_i(B_1,B_2) ,i \in \{1,2,3\}$. Notice that $f_i$ does not contain time $t$. By \Ito's formula,
+\begin{align*}
+    \dd X_1(t) &= \frac{1}{2} \Delta f_1(B_1(t),B_2(t)) \dd t + \nabla f_1(B_1(t), B_2(t)) \cdot \dd \vec{B}(t) \\
+    & = X_1 \dd B_1(t) - X_2 \dd B_2(t),
+\end{align*}
+\begin{align*}
+    \dd X_2(t) &= \frac{1}{2} \Delta f_2(B_1(t),B_2(t)) \dd t + \nabla f_2(B_1(t), B_2(t)) \cdot \dd \vec{B}(t) \\
+    & = X_2(t) \dd B_1(t) + X_1(t) \dd B_2(t),
+\end{align*}
+\begin{align*}
+    \dd X_3(t) &= \frac{1}{2} \Delta f_3(B_1(t),B_2(t)) \dd t + \nabla f_3(B_1(t), B_2(t)) \cdot \dd \vec{B}(t) \\
+    & = \frac{X_3(t)}{2} \dd t + X_3(t) \dd B_1(t),
+\end{align*}
+such that
+\[
+    \vec{X}(t) = \vec{x}_0 + \int_0^t\boldsymbol{A} \vec{X}(u) \dd u + \int_0^t \left[\boldsymbol{U} \vec{X}(u) , \boldsymbol{V} \vec{X}(u) \right] \cdot \dd \vec{B}(u).
+\]\qed
+
+\end{document}
