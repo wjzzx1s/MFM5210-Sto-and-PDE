@@ -1,0 +1,317 @@
+% ----------------------------------------------------------------------
+% Lecture 03 — Itô's formula and Itô processes
+% MFM5210 Stochastics and Partial Differential Equations
+% Transcribed from Lecture03.pdf (6 pages, handwritten notes, Sept 21, 2026)
+% ----------------------------------------------------------------------
+\documentclass[11pt]{article}
+
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[margin=1in]{geometry}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usepackage[hidelinks]{hyperref}
+
+% ---- macros -------------------------------------------------------------
+\newcommand{\Prob}{\mathbb{P}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\F}{\mathcal{F}}
+\newcommand{\dd}{\,\mathrm{d}}
+\newcommand{\ind}{\mathbf{1}}                 % indicator
+\newcommand{\cnum}[1]{\textcircled{\raisebox{-0.6pt}{\scriptsize #1}}} % circled example numbers
+\newcommand{\Var}{\operatorname{Var}}
+\newcommand{\Cov}{\operatorname{Cov}}
+
+% The notes' blue handwritten annotations are reproduced in blue.
+\newcommand{\ann}[1]{\textcolor{blue}{#1}}
+% Added during transcription: not written on the page.
+\newcommand{\ednote}[1]{\textcolor{red!70!black}{\footnotesize[#1]}}
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{example}{Example}[section]
+\newtheorem{remark}{Remark}[section]
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}{Proposition}[section]
+
+\title{\textbf{MFM5210 Stochastics and Partial Differential Equations}\\[4pt]
+\large Lecture 3 --- It\^o's formula and It\^o processes}
+\author{Wei Qi}
+\date{Sept 21, 2026}
+
+\begin{document}
+\maketitle
+
+\medskip
+\noindent\textit{\textcolor{red!70!black}{Editor's note.}} \textit{The first two pages of the
+handwritten notes recapitulate the closing material of Lecture 2 (the proposition on the
+properties of the It\^o integral with its remark, the three worked examples, and the closing
+question). They are transcribed in Section~1 for completeness; the new material of the lecture
+starts in Section~2.}
+
+\section{Recap: properties of the It\^o integral}
+
+\begin{proposition}[Properties of It\^o integrals]
+Let $f,g\in V(0,T)$.
+\begin{enumerate}
+\item[(i)] \ann{(Linearity)} $\forall$ constants $c_1,c_2\in\R$,
+      \[
+        \int_0^T(c_1f_t+c_2g_t)\dd B_t
+        =c_1\int_0^Tf_t\dd B_t+c_2\int_0^Tg_t\dd B_t .
+      \]
+\item[(ii)] $\E\bigl[\int_0^Tg_t\dd B_t\bigr]=0$.
+\item[(iii)] \ann{(It\^o isometry)}
+      $\E\bigl[\bigl(\int_0^Tg_t\dd B_t\bigr)^2\bigr]
+       =\E\bigl[\int_0^T|g_t|^2\dd t\bigr]$. \hfill$(\ast)$
+\item[(iv)] Let $X_t=\int_0^tg_s\dd B_s$. Then the process $\{X_t\}_{t\in[0,T]}$ is
+      continuous \ann{almost surely} and is $\F_t$-adapted.
+      \ann{(a.s.\ = with prob.\ 1)}
+\end{enumerate}
+\end{proposition}
+
+\noindent Recall that $\F_t=\F_t^B$ is the natural filtration of $\{B_t\}$. \;
+(Proofs omitted; see \O ksendal Ch.~3.)
+
+\begin{remark}
+Thanks to Fubini's theorem, we may further compute $(\ast)$ by
+\[
+  \E\Bigl[\int_0^T|g_t|^2\dd t\Bigr]=\int_0^T\E\bigl[|g_t|^2\bigr]\dd t .
+\]
+\end{remark}
+
+\subsection*{Examples}
+
+\noindent\cnum{1} $g_t\equiv1$. Then $g_t\in V(0,T)$, since
+\[
+  \begin{cases}
+    1\in\F_0\subset\F_t \quad \forall t,\\[2pt]
+    \E\bigl[\int_0^T1^2\dd t\bigr]=T<\infty .
+  \end{cases}
+\]
+Hence
+\[
+  \int_0^Tg_t\dd B_t=\int_0^T1\dd B_t=1\cdot(B_T-B_0)=B_T
+  \qquad \ann{\text{(by Step 1, for a simple process)}}
+\]
+\begin{center}
+\begin{tikzpicture}[scale=0.9]
+  \draw[->] (0,0) -- (4.2,0) node[right]{$T$};
+  \draw[->] (0,0) -- (0,1.6);
+  \draw[very thick,blue] (0,1) -- (3.4,1);
+  \node[left] at (0,1) {$1$};
+  \node[below left] at (0,0) {$0$};
+\end{tikzpicture}
+\end{center}
+
+\medskip
+\noindent\cnum{2} Simple predictable processes belong to $V(0,T)$ if $\E[a_j^2]<\infty$,
+e.g.\ the $\varphi_t$ above. Then $\int_0^4\varphi_t\dd B_t$ is a r.v.\ with mean $0$
+(but not normally distributed). Its variance can be computed using It\^o's isometry:
+\begin{align*}
+  \E\Bigl[\Bigl(\int_0^4\varphi_t\dd B_t\Bigr)^2\Bigr]
+    &= \E\Bigl[\int_0^4\varphi_t^2\dd t\Bigr]
+     = \int_0^4\E[\varphi_t^2]\dd t\\
+    &= \E[2^2]\,(1-0)+\E[25B_1^2]\,(3-1)+\E[B_1^2B_3^2]\,(4-3)\\
+    &= 4+50+5\\
+    &= 59 .
+\end{align*}
+
+\medskip
+\noindent\cnum{3} $\{B_t\}_{t\in[0,T]}\in V(0,T)$:
+
+\noindent\emph{Verification:}
+\begin{enumerate}
+\item[(1)] $B_t\in\F_t$ for each $t\in[0,T]$ \ann{(by definition of $\F_t^B$)};
+\item[(2)] $\E\bigl[\int_0^T|B_t|^2\dd t\bigr]=\int_0^T\E[B_t^2]\dd t=\int_0^Tt\dd t
+      =\dfrac{T^2}{2}<\infty$ \ann{(as $\E[B_t^2]=t$)}.
+\end{enumerate}
+Hence $\int_0^TB_t\dd B_t$ is well-defined. It is a r.v.\ with mean $0$ and variance
+\[
+  \E\Bigl[\Bigl(\int_0^TB_t\dd B_t\Bigr)^2\Bigr]=\int_0^T\E[B_t^2]\dd t=\frac{T^2}{2} .
+\]
+
+\medskip
+\noindent\cnum{4} \textbf{Exercise.} Verify that $\{B_t^2\}_{t\in[0,T]}\in V(0,T)$ and
+compute the variance of $\int_0^TB_t^2\dd B_t$.
+
+\medskip
+\noindent\textbf{Question.} How to compute/simplify $\int_0^Tg_t\dd B_t$ in general?
+This can be done using \emph{It\^o's formula} --- a central tool of It\^o calculus.
+
+\section{It\^o's formula}
+
+There are different versions of It\^o formula. The simplest form is the following:
+
+\begin{theorem}[It\^o's formula or It\^o's lemma]
+If $f(x):\R\to\R$ is $C^2$ (i.e.\ $f'(x)$ and $f''(x)$ exist and are continuous), then
+\[
+  f(B_t)-f(0)
+  =\underbrace{\int_0^tf'(B_s)\dd B_s}_{\ann{\text{It\^o integral}}}
+  +\frac12\underbrace{\int_0^tf''(B_s)\dd s}_{\ann{\text{classical integral}}}
+\]
+\end{theorem}
+
+\noindent Shorthand notation:
+\[
+  \dd f(B_t)=f'(B_t)\dd B_t+\tfrac12f''(B_t)\dd t .
+\]
+
+\subsection*{Example}
+
+\noindent To compute $\int_0^tB_s\dd B_s$,
+
+\noindent set $f'(x)=x$, so that $\int_0^tf'(B_s)\dd B_s=\int_0^tB_s\dd B_s$, \quad
+$f(x)=\dfrac{x^2}{2}$, \quad $f''(x)=1$.
+
+\noindent By It\^o's formula,
+\[
+  \frac12B_t^2-0=\int_0^tB_s\dd B_s+\frac12\underbrace{\int_0^t1\dd s}_{=\frac t2}
+  \qquad\Longrightarrow\qquad
+  \int_0^tB_s\dd B_s=\frac{B_t^2}{2}-\frac t2 .
+\]
+
+\section{It\^o processes and the general It\^o formula}
+
+\ann{($C^1$ in $t$; $C^2$ in $x$)} We write $f(t,x)\in C^{1,2}(I\times J)$ if
+\begin{itemize}
+\item $f_t=\dfrac{\partial f}{\partial t}$ exists and is continuous on interval $I$; and
+\item $f_x=\dfrac{\partial f}{\partial x}$, \;
+      $f_{xx}=\dfrac{\partial^2f}{\partial x^2}$ exist and are continuous on interval $J$.
+\end{itemize}
+
+\begin{definition}[It\^o process]
+An \emph{It\^o process} is a process $\{X_t\}_{t\ge0}$ of the form
+\begin{equation*}
+  \dd X_t=\mu_t\dd t+\sigma_t\dd B_t , \tag*{$(\ast)$}
+\end{equation*}
+i.e.
+\[
+  X_t=X_0+\underbrace{\int_0^t\mu(s,\omega)\dd s}_{\ann{\text{classical integral}}}
+  +\underbrace{\int_0^t\sigma(s,\omega)\dd B_s}_{\ann{\text{It\^o integral}}}
+\]
+where $\{\sigma(t,\omega)\}_{t\in[0,T]}\in V(0,T)$ for fixed $T>0$, and
+\[
+  \begin{cases}
+    \mu_t \text{ is } \F_t\text{-adapted}\\[2pt]
+    \displaystyle\int_0^T|\mu_t|\dd t<\infty \text{ a.s.}
+  \end{cases}
+  \qquad\text{for fixed } T>0.
+\]
+\end{definition}
+
+\begin{theorem}[It\^o's formula for It\^o processes]
+If $f(t,x)\in C^{1,2}([0,\infty)\times\R)$, then
+\begin{equation*}
+  \dd f(t,X_t)
+  =\frac{\partial f}{\partial t}(t,X_t)\dd t
+  +\frac{\partial f}{\partial x}(t,X_t)\dd X_t
+  +\frac12\frac{\partial^2f}{\partial x^2}(t,X_t)\dd X_t\cdot\dd X_t \tag*{(IF)}
+\end{equation*}
+where $\dd X_t\cdot\dd X_t$ is computed using $(\ast)$, linearity, and the
+multiplication rule:
+\[
+  \begin{array}{c|cc}
+    \cdot & \dd t & \dd B_t\\[2pt] \hline
+    \dd t & 0 & 0\\[2pt]
+    \dd B_t & 0 & \dd t
+  \end{array}
+  \tag*{(MR)}
+\]
+\end{theorem}
+
+\subsection*{Remarks}
+
+\noindent\textbf{(i)} By (MR),
+\begin{align*}
+  \dd X_t\cdot\dd X_t
+    &=(\mu_t\dd t+\sigma_t\dd B_t)\cdot(\mu_t\dd t+\sigma_t\dd B_t)\\
+    &=\mu_t^2\underbrace{\dd t\cdot\dd t}_{0}
+      +\mu_t\sigma_t\underbrace{\dd t\cdot\dd B_t}_{0}
+      +\sigma_t\mu_t\underbrace{\dd B_t\cdot\dd t}_{0}
+      +\sigma_t^2\underbrace{\dd B_t\cdot\dd B_t}_{\dd t}\\
+    &=\sigma_t^2\dd t .
+\end{align*}
+$\dd X_t\cdot\dd X_t$ is sometimes denoted by $\dd\langle X\rangle_t$ and we call
+\[
+  \langle X\rangle_t=\int_0^t\dd X_s\cdot\dd X_s=\int_0^t\sigma_s^2\dd s
+\]
+the \emph{quadratic variation process} of $X_t$.
+\ann{(eg.\ $\langle B\rangle_t=\int_0^t\dd s=t$)}
+
+\medskip
+\noindent\textbf{(ii)} Hence, (IF) can be written as
+\[
+  \dd f(t,X_t)=\Bigl[f_t(t,X_t)+\mu_tf_x(t,X_t)+\tfrac12\sigma_t^2f_{xx}(t,X_t)\Bigr]\dd t
+  +\sigma_tf_x(t,X_t)\dd B_t
+\]
+\ann{($f(t,X_t)$ is also an It\^o process)}
+
+\medskip
+\noindent\textbf{(iii)} In integral form,
+\begin{align*}
+  f(t,X_t)-f(0,X_0)
+    &=\int_0^t\Bigl[f_t(s,X_s)+\mu_sf_x(s,X_s)
+       +\frac{\sigma_s^2}{2}f_{xx}(s,X_s)\Bigr]\dd s\\
+    &\qquad+\int_0^t\sigma_sf_x(s,X_s)\dd B_s .
+\end{align*}
+
+\medskip
+\noindent\textbf{(iv)} If $X_t=B_t$ \ann{($\dd X_t=0\dd t+1\dd B_t$, an It\^o process)}, then
+\[
+  f(t,B_t)-f(0,0)
+  =\int_0^t\Bigl[f_t(s,B_s)+\tfrac12f_{xx}(s,B_s)\Bigr]\dd s
+  +\int_0^tf_x(s,B_s)\dd B_s .
+\]
+
+\medskip
+\noindent\textbf{(v)} If $f=f(x)$, then (IF) reduces to:
+\[
+  f(B_t)-f(0)=\int_0^tf'(B_s)\dd B_s+\frac12\int_0^tf''(B_s)\dd s .
+\]
+
+\section{Worked example: the exponential of \texorpdfstring{$B_t-\frac t2$}{B\_t - t/2}}
+
+\noindent\textbf{Example.} To compute $\displaystyle\int_0^te^{B_s-\frac s2}\dd B_s$
+\ann{(Ex: check $e^{B_s-\frac s2}\in V(0,t)$).}
+
+\noindent Set $f(t,x)=e^{x-\frac t2}$ so that $f(t,B_t)=e^{B_t-\frac t2}$.
+
+\noindent Then
+\[
+  f_t=-\tfrac12e^{x-\frac t2},\qquad f_x=f_{xx}=e^{x-\frac t2}.
+\]
+
+\noindent By It\^o's formula (in the form of (iv)),
+\[
+  e^{B_t-\frac t2}-1
+  =\int_0^t\Bigl(-\tfrac12e^{B_s-\frac s2}+\tfrac12e^{B_s-\frac s2}\Bigr)\dd s
+  +\int_0^te^{B_s-\frac s2}\dd B_s .
+\]
+\noindent Hence
+\[
+  \int_0^te^{B_s-\frac s2}\dd B_s=e^{B_t-\frac t2}-1 .
+\]
+
+\begin{remark}
+Alternatively, we can treat $X_t:=B_t-\dfrac t2$ as an It\^o process, i.e.
+\[
+  \dd X_t=\underbrace{-\tfrac12}_{\ann{\mu}}\dd t+\underbrace{1}_{\ann{\sigma}}\dd B_t .
+\]
+So we may also apply It\^o's formula (IF) to $X_t$ with $f(t,x)=f(x)=e^x$ to get:
+\begin{align*}
+  \dd e^{X_t}
+    &=e^{X_t}\underbrace{\dd X_t}_{\ann{-\frac12\dd t+\dd B_t}}
+      +\frac12e^{X_t}\underbrace{\dd X_t\cdot\dd X_t}_{\ann{0+0+0+1^2\dd t}}\\
+    &=\Bigl(-\tfrac12e^{X_t}\dd t+e^{X_t}\dd B_t\Bigr)+\tfrac12e^{X_t}\dd t\\
+    &=e^{X_t}\dd B_t ,
+\end{align*}
+so that
+\[
+  \Longrightarrow\qquad e^{B_t-\frac t2}-1=\int_0^te^{B_s-\frac s2}\dd B_s
+  \qquad\text{(same result).}
+\]
+\end{remark}
+
+\end{document}

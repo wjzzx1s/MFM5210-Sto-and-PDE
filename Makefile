@@ -1,5 +1,5 @@
 Makepdf = pdflatex -interaction=nonstopmode -halt-on-error
-LectureNums := 01 02
+LectureNums := 01 02 03 04
 HWNums := 1 2
 HWdir := HW
 

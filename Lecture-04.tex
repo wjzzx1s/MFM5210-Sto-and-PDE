@@ -1,0 +1,454 @@
+% ----------------------------------------------------------------------
+% Lecture 04 — Multi-dimensional Itô calculus and stochastic differential equations
+% MFM5210 Stochastics and Partial Differential Equations
+% Transcribed from Lecture04.pdf (8 pages, handwritten notes, Sept 28, 2026)
+% ----------------------------------------------------------------------
+\documentclass[11pt]{article}
+
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[margin=1in]{geometry}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usepackage[hidelinks]{hyperref}
+
+% ---- macros -------------------------------------------------------------
+\newcommand{\Prob}{\mathbb{P}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\F}{\mathcal{F}}
+\newcommand{\dd}{\,\mathrm{d}}
+\newcommand{\ind}{\mathbf{1}}                 % indicator
+\newcommand{\cnum}[1]{\textcircled{\raisebox{-0.6pt}{\scriptsize #1}}} % circled example numbers
+\newcommand{\Var}{\operatorname{Var}}
+\newcommand{\Cov}{\operatorname{Cov}}
+\newcommand{\nrm}[1]{\lVert #1\rVert}          % Euclidean norm
+
+% The notes' blue handwritten annotations are reproduced in blue.
+\newcommand{\ann}[1]{\textcolor{blue}{#1}}
+% Added during transcription: not written on the page.
+\newcommand{\ednote}[1]{\textcolor{red!70!black}{\footnotesize[#1]}}
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{example}{Example}[section]
+\newtheorem{remark}{Remark}[section]
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}{Proposition}[section]
+
+\title{\textbf{MFM5210 Stochastics and Partial Differential Equations}\\[4pt]
+\large Lecture 4 --- Multi-dimensional It\^o calculus and SDEs}
+\author{Wei Qi}
+\date{Sept 28, 2026}
+
+\begin{document}
+\maketitle
+
+% ======================================================================
+\section{Multi-dimensional Brownian motion and the vector-valued It\^o integral}
+% ======================================================================
+
+An $m$-dimensional BM (or BM in $\R^m$) is an $\R^m$-valued process
+$\vec B(t)=\bigl(B_1(t),B_2(t),\ldots,B_m(t)\bigr)$ where the coordinates
+$\{B_1(t)\}_{t\ge0}$, $\ldots$, $\{B_m(t)\}_{t\ge0}$ are independent Brownian motions.
+
+\medskip
+\noindent The natural filtration for $\vec B$ is the filtration $\{\F_t\}_{t\ge0}$, where
+\[
+  \F_t=\sigma\bigl\{B_1(s),\ldots,B_m(s): 0\le s\le t\bigr\}
+  \qquad\ann{\bigl(\vec B(s)=(B_1(s),\ldots,B_m(s))\bigr)}
+\]
+
+Let $\Phi(t,\omega)=[\phi_{ij}(t,\omega)]_{n\times m}$ be an $n\times m$
+matrix-valued process. \ann{If} every $\phi_{ij}(t,\omega)\in V(0,T)$, we define
+$\Phi(t,\omega)\in V^{n\times m}(0,T)$.
+
+\medskip
+\noindent In this case, we can define the \emph{vector-valued It\^o integral}:
+\begin{align*}
+  \int_0^t\Phi(s,\omega)\dd\vec B_s
+    &=\int_0^t
+      \begin{bmatrix}
+        \phi_{11}(s,\omega) & \cdots & \phi_{1m}(s,\omega)\\
+        \vdots & & \vdots\\
+        \phi_{n1}(s,\omega) & \cdots & \phi_{nm}(s,\omega)
+      \end{bmatrix}_{n\times m}
+      \begin{bmatrix}
+        \dd B_1(s)\\ \vdots\\ \dd B_m(s)
+      \end{bmatrix}_{m\times1}\\
+    &=\begin{bmatrix}
+        \sum_{j=1}^m\int_0^t\phi_{1j}(s,\omega)\dd B_j(s)\\
+        \vdots\\
+        \sum_{j=1}^m\int_0^t\phi_{nj}(s,\omega)\dd B_j(s)
+      \end{bmatrix}_{n\times1}
+      \qquad\text{for } t\in[0,T],
+\end{align*}
+which is an $\R^n$-valued $\F_t$-adapted process.
+
+\medskip
+\noindent An \emph{$n$-dimensional It\^o process} is an $\R^n$-valued process
+$\vec X(t)=\bigl(X_1(t),\ldots,X_n(t)\bigr)$ of the form
+\begin{equation*}
+  \begin{cases}
+    \dd X_1(t)=\mu_1(t)\dd t+\sigma_{11}(t)\dd B_1(t)+\cdots+\sigma_{1m}(t)\dd B_m(t)\\[2pt]
+    \qquad\vdots\\[2pt]
+    \dd X_n(t)=\mu_n(t)\dd t+\sigma_{n1}(t)\dd B_1(t)+\cdots+\sigma_{nm}(t)\dd B_m(t)
+  \end{cases}
+  \tag*{(1)}
+\end{equation*}
+or
+\begin{equation*}
+  \dd\vec X(t)=\vec\mu(t)\dd t+\sigma(t)\dd\vec B(t)
+  \qquad\bigl(\vec\mu\in\R^{n\times1},\ \sigma\in\R^{n\times m}\bigr),
+  \tag*{(2)}
+\end{equation*}
+where each $\mu_i$, $\sigma_{ij}$ satisfies the conditions for an It\^o process.
+
+\medskip
+\noindent (1) and (2) both mean:
+\[
+  \vec X(t)=\vec X(0)+\int_0^t\vec\mu(s)\dd s+\int_0^t\sigma(s)\dd\vec B(s).
+\]
+
+% ======================================================================
+\section{General It\^o's formula}
+% ======================================================================
+
+\begin{theorem}[General It\^o's formula]
+If $f(t,\vec x)\in C^{1,2}\bigl((0,\infty)\times\R^n\bigr)$, then
+\begin{align*}
+  \dd f\bigl(t,\vec X(t)\bigr)
+    &=\frac{\partial f}{\partial t}\bigl(t,\vec X(t)\bigr)\dd t
+      +\sum_{i=1}^n\frac{\partial f}{\partial x_i}\bigl(t,\vec X(t)\bigr)\dd X_i(t)\\
+    &\qquad+\frac12\sum_{i=1}^n\sum_{j=1}^n
+      \frac{\partial^2f}{\partial x_i\partial x_j}\bigl(t,\vec X(t)\bigr)
+      \dd X_i(t)\cdot\dd X_j(t)
+\end{align*}
+where $\dd X_i(t)\cdot\dd X_j(t)$ is computed using linearity and the
+multiplication rule below:
+\[
+  \begin{array}{c|ccc}
+    \cdot & \dd t & \dd B_i(t) & \dd B_j(t)\ \ (i\neq j)\\[2pt] \hline
+    \dd t & 0 & 0 & 0\\[2pt]
+    \dd B_i(t) & 0 & \dd t & 0\\[2pt]
+    \dd B_j(t) & 0 & 0 & \dd t
+  \end{array}
+\]
+\end{theorem}
+
+\subsection*{Example: $m=n$, $\vec X(t)=\vec B(t)$, BM in $\R^n$}
+
+\noindent Then $\vec X(t)$ is an It\^o process with
+$\vec\mu=\vec0$ and
+$\sigma=\begin{bmatrix}1&0\\0&1\end{bmatrix}_{n\times n}$, and It\^o formula becomes:
+\[
+  \dd f(t,\vec B_t)
+  =f_t(t,\vec B_t)\dd t+\nabla f(t,\vec B_t)\cdot\dd\vec B_t
+  +\frac12\Delta f(t,\vec B_t)\dd t
+\]
+where
+$\nabla f(t,x)=\Bigl(\dfrac{\partial f}{\partial x_1},\ldots,\dfrac{\partial f}{\partial x_n}\Bigr)$
+is the gradient of $f$ and
+$\Delta f(t,x)=\sum_{i=1}^n\dfrac{\partial^2f}{\partial x_i^2}$
+is the Laplacian of $f$.
+
+\subsection*{Product rule}
+
+\noindent If $\bigl(X_1(t),X_2(t)\bigr)$ is an It\^o process, then
+\[
+  \dd\bigl(X_1(t)X_2(t)\bigr)
+  =X_2(t)\dd X_1(t)+X_1(t)\dd X_2(t)+\dd X_1(t)\cdot\dd X_2(t)
+\]
+
+\noindent\textbf{Proof.} Apply the above theorem with
+$f(t,\vec x)=f(\vec x)=x_1x_2$. \hfill$\square$
+
+% ======================================================================
+\section{Stochastic differential equations (SDE)}
+% ======================================================================
+
+Let $\{B_t\}_{t\ge0}$ be a standard BM with natural filtration $\{\F_t\}_{t\ge0}$.
+Fix $x_0\in\R$ and two functions $\mu,\sigma:[0,\infty)\times\R\to\R$ (non-random).
+
+\begin{definition}[Strong solution of an SDE]
+Let $I\subset[0,\infty)$ be an interval. A process $\{X_t\}_{t\in I}$ is called a
+\emph{(strong) solution} to the SDE
+\[
+  \begin{cases}
+    \dd X_t=\mu(t,X_t)\dd t+\sigma(t,X_t)\dd B_t, \quad t\in I\\[2pt]
+    X_0=x_0
+  \end{cases}
+\]
+if $X_t$ is $\F_t$-adapted, $X_0=x_0$, and a.s.\ $\forall t\in I$,
+\[
+  X_t=x_0+\int_0^t\mu(s,X_s)\dd s+\int_0^t\sigma(s,X_s)\dd B_s .
+\]
+\end{definition}
+
+\noindent\textbf{Remarks.}
+\begin{itemize}
+\item $\int_0^t\mu(s,X_s)\dd s$ is well-defined if $\int_0^t|\mu(s,X_s)|\dd s<\infty$.
+\item Even if $\sigma(s,X_s)\notin V(0,t)$, $\int_0^t\sigma(s,X_s)\dd B_s$ may be
+      well-defined, as long as $\int_0^t|\sigma(s,X_s)|^2\dd s<\infty$.
+\item However, if $\E\bigl[\int_0^t|\sigma(s,X_s)|^2\dd s\bigr]=\infty$, we may not
+      have $\E\bigl[\int_0^t\sigma(s,X_s)\dd B_s\bigr]=0$
+      (this requires $\sigma(s,X_s)\in V(0,t)$).
+\end{itemize}
+
+\subsection*{Examples}
+
+\noindent\cnum{1} \textbf{Geometric BM}
+\[
+  \mu(t,x)=\mu(x)=\alpha x,\qquad \sigma(t,x)=\sigma(x)=\beta x
+\]
+\[
+  \begin{cases}
+    \dd X_t=\alpha X_t\dd t+\beta X_t\dd B_t, \quad t\ge0,\\
+    X_0=x_0
+  \end{cases}
+  \tag*{(E1)}
+\]
+where $\alpha\in\R$, $\beta>0$, $x_0>0$ are given constants.
+
+\medskip
+\noindent Interpretation: $\alpha$ --- rate of growth/decay \ann{$(\alpha>0)$,\; $(\alpha<0)$};
+$\beta$ --- variability/volatility.
+
+\begin{proposition}
+$X_t=x_0e^{(\alpha-\frac{\beta^2}{2})t+\beta B_t}$ is a strong solution to (E1).
+\end{proposition}
+
+\begin{proof}
+First, $X_t$ is a function of $B_t$, so it is $\F_t$-measurable.
+Also, $X_0=x_0e^0=x_0$. It remains to verify the SDE.
+
+\noindent Set $f(t,x)=x_0e^{(\alpha-\frac{\beta^2}{2})t+\beta x}$ so that
+$X_t=f(t,B_t)$. Then
+\[
+  \begin{cases}
+    f_t=\bigl(\alpha-\frac{\beta^2}{2}\bigr)\cdot x_0e^{(\alpha-\frac{\beta^2}{2})t+\beta x}\\[6pt]
+    f_x=\beta\cdot x_0e^{(\alpha-\frac{\beta^2}{2})t+\beta x}\\[6pt]
+    f_{xx}=\beta^2\cdot x_0e^{(\alpha-\frac{\beta^2}{2})t+\beta x}
+  \end{cases}
+\]
+By It\^o's formula,
+\begin{align*}
+  \dd X_t
+    &=\dd f(t,B_t)\\
+    &=f_t(t,B_t)\dd t+f_x(t,B_t)\dd B_t+\frac12f_{xx}(t,B_t)\dd B_t\cdot\dd B_t\\
+    &=\Bigl(\alpha-\frac{\beta^2}{2}\Bigr)X_t\dd t+\beta X_t\dd B_t+\frac12\beta^2X_t\dd t\\
+    &=\alpha X_t\dd t+\beta X_t\dd B_t .
+\end{align*}
+That is,
+\[
+  X_t=x_0+\int_0^t\alpha X_s\dd s+\int_0^t\beta X_s\dd B_s ,\qquad \forall t\ge0 .
+\]
+\end{proof}
+
+% ======================================================================
+\section{SDE examples, continued}
+% ======================================================================
+
+\noindent\cnum{1} \textbf{Geometric BM.}
+$X_t=x_0e^{(\alpha-\frac{\beta^2}{2})t+\beta B_t}$ is a solution to
+\[
+  \begin{cases}
+    \dd X_t=\alpha X_t\dd t+\beta X_t\dd B_t, \quad t\ge0\\[2pt]
+    X_0=x_0
+  \end{cases}
+\]
+\ednote{the page writes $\beta X_t\dd t$ here; transcribed as the SDE of (E1)}
+
+\medskip
+\noindent\textbf{Rmk.} If $x_0>0$, then $X_t>0$ $\forall t\ge0$. $X_t$ is not normally
+distributed; $\log X_t$ is.
+
+\medskip
+\noindent\cnum{2} \textbf{Ornstein--Uhlenbeck / Langevin equation}
+\[
+  \begin{cases}
+    \dd X_t=-\mu X_t\dd t+\sigma\dd B_t, \quad t\ge0,\\[2pt]
+    X_0=x_0
+  \end{cases}
+  \tag*{(E2)}
+\]
+where $\mu>0$, $\sigma>0$, $x_0\in\R$ are given constants.
+
+\begin{proposition}
+$X_t=x_0e^{-\mu t}+\sigma\int_0^te^{-\mu(t-s)}\dd B_s$ is a strong solution to (E2).
+\ann{(Rmk: $X_t$ is normally distributed)}
+\end{proposition}
+
+\begin{proof}
+By the property of the It\^o integral (Lec.~3, Prop.\ (iv)),
+$\int_0^te^{-\mu(t-s)}\dd B_s$ is $\F_t$-measurable, so is $X_t$. Hence $X_t$ is
+$\F_t$-adapted.
+
+\noindent Write $X_t=x_0e^{-\mu t}+\sigma e^{-\mu t}\displaystyle\int_0^te^{\mu s}\dd B_s$.
+
+\noindent We set $X_t=x_0e^{-\mu t}+\sigma e^{-\mu t}Y_t=f(t,Y_t)$, where
+\[
+  \begin{cases}
+    f(t,y)=x_0e^{-\mu t}+\sigma e^{-\mu t}y\\[4pt]
+    Y_t=\displaystyle\int_0^te^{\mu s}\dd B_s \quad\text{i.e.}\quad
+      \dd Y_t=e^{\mu t}\dd B_t \ann{\text{(It\^o process)}}
+  \end{cases}
+\]
+By It\^o's formula,
+\[
+  \dd f(t,Y_t)
+  =f_t(t,Y_t)\dd t+f_y(t,Y_t)\dd Y_t+\frac12f_{yy}(t,Y_t)\dd Y_t\cdot\dd Y_t
+\]
+where $f_t=-\mu\bigl(x_0e^{-\mu t}+\sigma e^{-\mu t}y\bigr)$, \;
+$f_y=\sigma e^{-\mu t}$, \; $f_{yy}=0$
+\begin{align*}
+  \Longrightarrow\qquad
+  \dd X_t
+    &=-\mu X_t\dd t+\sigma e^{-\mu t}\cdot e^{\mu t}\dd B_t+0\\
+    &=-\mu X_t\dd t+\sigma\dd B_t .
+\end{align*}
+Since $X_0=x_0$,
+\[
+  X_t=x_0-\int_0^t\mu X_s\dd s+\int_0^t\sigma\dd B_s ,\qquad \forall t\ge0 .
+\]
+\end{proof}
+
+% ======================================================================
+\section{Existence and uniqueness theorem}
+% ======================================================================
+
+\noindent Consider the SDE
+\[
+  \begin{cases}
+    \dd X_t=\mu(t,X_t)\dd t+\sigma(t,X_t)\dd B_t, \quad t\in[0,T],\\[2pt]
+    X_0=x_0
+  \end{cases}
+\]
+
+\noindent Suppose $\exists$ constant $C_0<\infty$ s.t.\ the following conditions hold:
+\begin{enumerate}
+\item[(i)] \emph{uniform Lipschitz condition in $x$}: $\forall t\in[0,T]$,
+      $\forall x,y\in\R$,
+      \[
+        |\mu(t,x)-\mu(t,y)|+|\sigma(t,x)-\sigma(t,y)|\le C_0|x-y|
+      \]
+\item[(ii)] \emph{uniform linear growth in $x$}: $\forall t\in[0,T]$, $\forall x\in\R$,
+      \[
+        |\mu(t,x)|+|\sigma(t,x)|\le C_0(1+|x|).
+      \]
+\end{enumerate}
+
+\noindent Then there exists a strong solution $\{X_t\}_{t\in[0,T]}$ that is continuous
+in $t$ on $[0,T]$ and $L^2$-bounded i.e.\
+$\sup\limits_{t\in[0,T]}\E[X_t^2]<\infty$.
+
+\medskip
+\noindent Moreover, the solution is (strongly or pathwise) \emph{unique} in the sense
+that if $\{Y_t\}_{t\in[0,T]}$ is another continuous and $L^2$-bounded solution, then
+\[
+  \Prob\bigl\{X_t=Y_t\ \ \forall t\in[0,T]\bigr\}=1 .
+\]
+
+\subsection*{Example}
+
+\noindent$\dd X_t=\alpha X_t\dd t+\beta X_t\dd B_t$ \quad ($\alpha,\beta$: constants)
+
+\noindent Take $\mu(t,x)=\alpha x$, $\sigma(t,x)=\beta x$. We see that the solution in
+Example \cnum{1} is unique since:
+\begin{itemize}
+\item $|\mu(t,x)-\mu(t,y)|+|\sigma(t,x)-\sigma(t,y)|=(|\alpha|+|\beta|)|x-y|$
+\item $|\mu(t,x)|+|\sigma(t,x)|=|\alpha x|+|\beta x|\le(|\alpha|+|\beta|)(1+|x|)$.
+\end{itemize}
+
+% ======================================================================
+\section{Remarks on the hypotheses}
+% ======================================================================
+
+\noindent\cnum{1} If $\mu(t,x)=\mu(x)$ and $\sigma(t,x)=\sigma(x)$ do not depend on
+$t$, then the Lipschitz condition automatically implies linear growth:
+$\forall x\in\R$,
+\begin{align*}
+  |\mu(x)|
+    &=|\mu(x)-\mu(0)+\mu(0)|\\
+    &\le|\mu(x)-\mu(0)|+|\mu(0)|\\
+    &\le C_0|x-0|+|\mu(0)|\le\bigl(C_0+|\mu(0)|\bigr)\bigl(|x|+1\bigr).
+\end{align*}
+
+\medskip
+\noindent\cnum{2} If $\mu:\R\to\R$ is differentiable \& $\mu'(x)\le C_0$ $\forall x\in\R$,
+then $\mu$ is Lipschitz.
+
+\noindent\textbf{Pf:} By the mean value theorem, $\forall x,y\in\R$, $\exists z$ lying
+between $x$ \& $y$ s.t.
+\[
+  \mu(x)-\mu(y)=\mu'(z)\cdot(x-y)
+  \qquad\Longrightarrow\qquad
+  |\mu(x)-\mu(y)|=|\mu'(z)|\cdot|x-y|\le C_0|x-y| .
+\]
+
+\medskip
+\noindent Solutions may not be unique if the Lipschitz or linear growth condition
+fails, e.g.
+\[
+  \begin{cases}
+    \dd X_t=3X_t^{1/3}\dd t+3X_t^{2/3}\dd B_t, \quad t\ge0,\\[2pt]
+    X_0=0
+  \end{cases}
+\]
+Solutions are not unique (HW).
+
+% ======================================================================
+\section{Multi-dimensional case}
+% ======================================================================
+
+\begin{theorem}
+Let $\{\vec B_t\}_{t\ge0}$ be a standard BM in $\R^d$ with natural filtration
+$\{\F_t\}_{t\ge0}$.
+
+\noindent Let $\vec x_0\in\R^n$ and $\mu:[0,T]\times\R^n\to\R^n$,
+$\sigma:[0,T]\times\R^n\to\R^{n\times d}$ be two functions. Suppose
+$\exists C_0<\infty$ s.t.\ $\forall t\in[0,T]$, $\forall\vec x,\vec y\in\R^n$,
+\begin{itemize}
+\item $\displaystyle\sum_{i=1}^n|\mu_i(t,\vec x)-\mu_i(t,\vec y)|
+       +\sum_{i=1}^n\sum_{j=1}^d|\sigma_{ij}(t,\vec x)-\sigma_{ij}(t,\vec y)|
+       \le C_0\nrm{\vec x-\vec y}$,
+\item $\displaystyle\sum_{i=1}^n|\mu_i(t,\vec x)|
+       +\sum_{i=1}^n\sum_{j=1}^d|\sigma_{ij}(t,\vec x)|
+       \le C_0\bigl(1+\nrm{\vec x}\bigr)$,
+\end{itemize}
+where $\nrm{\vec x}=\bigl(|x_1|^2+\cdots+|x_n|^2\bigr)^{1/2}$ \quad $\forall\vec x\in\R^n$.
+
+\noindent Then the SDE
+\[
+  (\ast)\quad
+  \begin{cases}
+    \underbrace{\dd\vec X_t}_{n\times1}
+      =\underbrace{\vec\mu(t,\vec X_t)}_{n\times1}\dd t
+      +\underbrace{\sigma(t,\vec X_t)}_{n\times d}\underbrace{\dd\vec B_t}_{d\times1},
+      \quad t\in[0,T],\\[4pt]
+    \vec X_0=\vec x_0
+  \end{cases}
+\]
+has a unique strong solution that is continuous \& $L^2$-bounded.
+\end{theorem}
+
+\noindent Here, \emph{strong solution} means an $\R^n$-valued process
+$\{\vec X_t\}_{t\in[0,T]}$ that is adapted to $\F_t$, $\vec X_0=\vec x_0$ and a.s.\
+$\forall t\in[0,T]$,
+\[
+  \vec X_t=\vec x_0+\int_0^t\vec\mu(s,\vec X_s)\dd s+\int_0^t\sigma(s,\vec X_s)\dd\vec B_s
+  \qquad\ann{\text{(understood as vector-valued It\^o integral)}}
+\]
+
+\medskip
+\noindent\textbf{Rmk.} $(\ast)$ can be written as a system of $n$ SDEs:
+\[
+  \begin{cases}
+    \dd X_1(t)=\mu_1(t,\vec X_t)\dd t+\sum\limits_{j=1}^d\sigma_{1j}(t,\vec X_t)\dd B_j(t)\\
+    \qquad\vdots\\
+    \dd X_n(t)=\mu_n(t,\vec X_t)\dd t+\sum\limits_{j=1}^d\sigma_{nj}(t,\vec X_t)\dd B_j(t)
+  \end{cases}
+\]
+
+\end{document}

@@ -17,6 +17,8 @@ AI assistance and compiled with `pdflatex`; the homework is solved in the same L
 | --- | --- |
 | `Lecture-01.tex` | Lecture 1 (Sept 7, 2026) — *Preliminaries*: probability spaces, random variables, measurability and the Borel sigma-algebra, stochastic processes and filtrations, Brownian motion. Compiles to `Lecture-01.pdf`. |
 | `Lecture-02.tex` | Lecture 2 (Sept 14, 2026) — properties of Brownian motion, worked examples, and Itô calculus up to the Itô integral. Compiles to `Lecture-02.pdf`. |
+| `Lecture-03.tex` | Lecture 3 (Sept 21, 2026) — *Itô's formula and Itô processes*: a recap of the Itô-integral properties, the elementary form of Itô's formula, Itô processes with the general Itô formula and its multiplication rule. Compiles to `Lecture-03.pdf`. |
+| `Lecture-04.tex` | Lecture 4 (Sept 28, 2026) — *multi-dimensional Itô calculus and SDEs*: vector-valued Itô integrals, the general Itô formula in $\mathbb{R}^n$, the product rule, stochastic differential equations with their strong solutions (geometric Brownian motion, Ornstein–Uhlenbeck), and the existence and uniqueness theorems. Compiles to `Lecture-04.pdf`. |
 | `HW/hw1.tex` | Homework 1 solutions (Sept 15, 2026), built on the homework class. Compiles to `hw1.pdf` in the repository root. |
 | `HW/hw2.tex` | Homework 2 solutions (Sept 21, 2026), built on the homework class. Compiles to `hw2.pdf` in the repository root. |
 | `MFM-hw.cls` | Homework document class: title block, problem and subproblem counters/macros, page headers. |
@@ -25,14 +27,16 @@ AI assistance and compiled with `pdflatex`; the homework is solved in the same L
 
 Naming scheme: `Lecture-MM.tex` for the following lectures and `HW/hwM.tex` for the following
 homework sets. `HW/` is searched automatically, so a homework file also still builds if it sits in
-the repository root.
+the repository root. The handwritten originals are exported as `LectureMM.pdf` (no dash), so a
+lecture source never writes over its own original: `Lecture-03.tex` produces `Lecture-03.pdf`, a
+different file from `Lecture03.pdf`.
 
 ## Building
 
 Requirements: a TeX Live installation with `pdflatex` and the standard packages `geometry`,
 `amsmath`, `amssymb`, `amsthm`, `mathtools`, `amsfonts`, `bbm`, `hyperref`, plus `xcolor` and
-`tikz` for the drawings and the blue annotations in Lecture 2. The document class additionally
-pulls in `ifthen`, `titlesec` and `fancyhdr` on its own.
+`tikz` for the drawings and the blue annotations in Lectures 2 and 3. The document class
+additionally pulls in `ifthen`, `titlesec` and `fancyhdr` on its own.
 
 ### With make
 
@@ -50,13 +54,14 @@ How the rules behave (verified with `make clean-all && make all`):
 
 * Lecture targets are compiled with **two** `pdflatex` passes before the auxiliary files are
   cleaned, so a table of contents and any labelled cross-references resolve on the first build.
-  The two lectures here do not use them yet, which is why a single pass would also work today.
+  None of the four lectures uses a table of contents or an automatic reference yet, which is why a
+  single pass would also work today.
 * Homework sources are located through `VPATH` plus an exported `TEXINPUTS`, so `hwM.tex` builds
   from `HW/` or from the root, and `MFM-hw.cls` is found in either layout; `hwM.pdf` is written to
   the repository root.
-* `LectureNums := 01 02` and `HWNums := 1 2` are the list of record. A listed number that has no
-  source is reported as `no source found … - skipped` instead of breaking the build, so a lecture
-  or homework number can be announced in advance.
+* `LectureNums := 01 02 03 04` and `HWNums := 1 2` are the list of record. A listed number that has
+  no source is reported as `no source found … - skipped` instead of breaking the build, so a
+  lecture or homework number can be announced in advance.
 
 ### Without make
 
@@ -89,20 +94,66 @@ pdflatex Lecture-01.tex && pdflatex Lecture-01.tex   # the same by hand
 3. *Itô calculus*: the construction of the Itô integral for elementary (simple) processes and then
    the integral for processes in $V(0,T)$, with the isometry.
 
+**Lecture 3 — Itô's formula and Itô processes.** Four sections:
+
+1. *Recap: properties of the Itô integral*: linearity, zero mean, the Itô isometry $(\ast)$ and the
+   continuity/adaptedness of the integral, the Fubini remark, the three worked examples with the
+   step-function drawing, the exercise, and the closing question.
+2. *Itô's formula*: the elementary form — for $f$ of class $C^2$,
+   $f(B_t)-f(0)=\int_0^t f'(B_s)\,\mathrm{d}B_s+\frac{1}{2}\int_0^t f''(B_s)\,\mathrm{d}s$ — the
+   shorthand differential notation, and the worked example
+   $\int_0^tB_s\,\mathrm{d}B_s=\frac{B_t^2}{2}-\frac{t}{2}$.
+3. *Itô processes and the general Itô formula*: the class $C^{1,2}$, the definition of an Itô
+   process $(\ast)$, Itô's formula (IF) for Itô processes with the multiplication rule (MR), and
+   the five remarks — quadratic variation $\mathrm{d}X_t\cdot\mathrm{d}X_t=\sigma_t^2\,\mathrm{d}t$
+   with $\langle X\rangle_t$, the expanded form of (IF), its integral form, the Brownian-motion
+   case, and the case $f=f(x)$.
+4. *Worked example*: $\int_0^t e^{B_s-s/2}\,\mathrm{d}B_s$ computed twice, once through Itô's
+   formula in the form (iv) and once by treating $B_t-t/2$ as an Itô process.
+
+**Lecture 4 — Multi-dimensional Itô calculus and SDEs.** Seven sections:
+
+1. *Multi-dimensional Brownian motion and the vector-valued Itô integral*: the $m$-dimensional
+   Brownian motion and its natural filtration, matrix-valued processes in $V^{n\times m}(0,T)$,
+   the definition of the vector-valued integral of a matrix process against $\mathrm{d}\vec B_s$,
+   and the $n$-dimensional Itô process in its system form and in its matrix form.
+2. *General Itô's formula*: the second-order formula in $\mathbb{R}^n$, the multiplication rule for
+   $\mathrm{d}B_i(t)\cdot\mathrm{d}B_j(t)$, the Brownian-motion case with the gradient and the
+   Laplacian, and the product rule with its proof.
+3. *Stochastic differential equations*: the definition of a strong solution and the remarks on when
+   the two integrals in it are well defined.
+4. *SDE examples, continued*: geometric Brownian motion (E1) and the Ornstein–Uhlenbeck /
+   Langevin equation (E2), each with its explicit solution proved with Itô's formula.
+5. *Existence and uniqueness theorem*: the uniform Lipschitz and linear growth conditions, the
+   existence of a continuous, square-integrable solution, and pathwise uniqueness.
+6. *Remarks on the hypotheses*: a time-independent coefficient satisfying the Lipschitz condition
+   satisfies linear growth as well, a bounded derivative implies the Lipschitz condition, and a
+   non-uniqueness example, $3X_t^{1/3}\,\mathrm{d}t+3X_t^{2/3}\,\mathrm{d}B_t$ with $X_0=0$.
+7. *Multi-dimensional case*: the same theorem for $\mu:[0,T]\times\mathbb{R}^n\to\mathbb{R}^n$ and
+   $\sigma:[0,T]\times\mathbb{R}^n\to\mathbb{R}^{n\times d}$, with the SDE read as a system of $n$
+   scalar SDEs.
+
 ### Notation and conventions in the notes
 
-* Each lecture file is a standalone `article` (11pt, 1in margins) that defines the theorem-like
-  environments `definition`, `example`, `remark`, `fact`, `lemma` and `theorem`, numbered inside
-  the section.
+* Each lecture file is a standalone `article` (11pt, 1in margins). The theorem-like environments
+  are declared per file: Lecture 1 has `definition`, `example`, `remark`, `fact`, `lemma` and
+  `theorem`; Lecture 2 only `proposition`; Lectures 3 and 4 have `definition`, `example`, `remark`,
+  `theorem` and `proposition`, numbered inside the section.
 * The short macros for expectation, probability, the reals, the filtration, the differential and
   the indicator are declared **per file**, at the top of each `.tex`; there is no shared preamble.
   That is deliberate — files stay self-contained — but it also means the macros are unavailable to
   this README (see the maintainer note).
-* The blue-colour annotation macro defined at the top of the lecture files marks a side note: an
-  explanation added during transcription rather than spoken in class. It is the marker for "this
-  came from the editor, check it".
-* A second local macro produces the circled example numbers used in Lecture 2.
-* The empty-set symbol is redefined to the slashed variant (∅).
+* Two annotation macros mark where a line comes from. The blue one reproduces the blue ink of the
+  handwritten originals: side notes and side explanations, printed in blue. The red one (used
+  sparingly, inline as a bracketed flag or as a red *Editor's note.* paragraph) marks what was
+  added during transcription and is **not** in the source — currently the note opening Lecture 3,
+  which says that its first two pages repeat the close of Lecture 2, and the corrected coefficient
+  in Lecture 4's geometric-Brownian-motion example.
+* A second local macro produces the circled example numbers used in Lectures 2, 3 and 4.
+* The handwritten notes label their own equations — $(\ast)$, (IF), (MR), (E1), (E2), and the two
+  ordered systems (1) and (2) — and the transcription keeps those labels as fixed tags, so they do
+  not disturb the automatic numbering of the theorem-like environments.
+* Lecture 1 redefines the empty-set symbol to the slashed variant (∅).
 
 ## Homework
 
@@ -113,7 +164,7 @@ pdflatex Lecture-01.tex && pdflatex Lecture-01.tex   # the same by hand
 | 1 | Which events belong to the sigma-algebra $\mathcal{F}_2$, and which random variables are $\mathcal{F}_3$-measurable (Brownian events and integrals versus the future). |
 | 2 | For $0<s<t$: the distribution of $B_s+B_t$, a normality lemma for sums of independent Gaussians used in the proof, and the $n$-th moment of $B_t$. |
 | 3 | A simple process on $[0,5]$: is it predictable, and what is the Itô integral of it, written out as its defining finite sum. |
-| 4 | Mean and variance of stochastic integrals of the form $\int_0^T f(B_t)\mathrm{d}B_t$, via the Itô isometry. |
+| 4 | Mean and variance of stochastic integrals of the form $\\int_0^T f(B_t)\\,\\mathrm{d}B_t$, via the Itô isometry. |
 | 5 | Whether $(B_t+t)^2$ belongs to $V(0,T)$, and the mean and variance of its Itô integral. |
 
 `HW/hw2.tex` solves six problems that apply Itô's formula and the integration by parts of the Itô
@@ -134,13 +185,23 @@ subproblems (the class is a local style file, kept at the repository root so bot
 
 ## Status
 
-* Transcribed: Lecture 1, Lecture 2; homework 1 and homework 2 complete.
-* Pending: Lecture 3 onwards, homework 3 onwards — add the numbers to `LectureNums` / `HWNums`,
+* Transcribed: Lectures 1 to 4; homework 1 and homework 2 complete.
+* Pending: Lecture 5 onwards, homework 3 onwards — add the numbers to `LectureNums` / `HWNums`,
   drop the sources in place, and `make all` picks them up.
+* Lecture 3 opens with a recap section rather than with new material: pages 1–2 of the handwritten
+  notes repeat the closing content of Lecture 2 (the proposition, its Fubini remark, the three
+  examples, the exercise and the closing question). The transcription keeps them in Section 1
+  instead of dropping or renumbering them, and says so in a red editor's note on the title page.
+* Two places where the transcription deviates from what is written on the page: Lecture 4's
+  Example ① restates geometric Brownian motion as $\alpha X_t\,\mathrm{d}t+\beta X_t\,\mathrm{d}t$
+  where (E1) has $\beta X_t\,\mathrm{d}B_t$ — the typeset version uses the SDE of (E1) and flags the
+  slip in red; and Lecture 3's first page repeats, word for word, material already transcribed in
+  `Lecture-02.tex`, which is kept as the recap of Section 1.
 * The lecture notes are **transcribed from handwritten notes with AI assistance**, so the content
-  needs to be checked against the originals; the blue annotations mark the places added by the
-  editor. The commit history records the corrections made so far (typos in Homework 1, a missing
-  exponent in the normality lemma, the title of Lecture 2, the Itô-formula terms in Homework 2).
+  needs to be checked against the originals; the red editor's notes mark the places added by the
+  editor, and the blue annotations reproduce the blue ink of the originals. The commit history
+  records the corrections made so far (typos in Homework 1, a missing exponent in the normality
+  lemma, the title of Lecture 2, the Itô-formula terms in Homework 2).
 
 ## License
 
